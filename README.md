@@ -10,6 +10,17 @@
 - Accessible via any browser @ http://boatbuddy.live with ability for many simultaneous connections
 - Bluetooth receiver to connect phones for playing music through Raspberry Pi audio output
 
+<p float="center">
+  <img src="screenshots/IMG_5552.PNG" width="325" />
+  <img src="screenshots/IMG_5554.PNG" width="325" /> 
+  <img src="screenshots/IMG_5555.PNG" width="325" />
+</p>
+<p float="center">
+    <img src="screenshots/IMG_5556.PNG" width="300" />
+    <img src="screenshots/IMG_5557.PNG" width="300" />
+</p>
+
+
 ## Parts List
 - Raspberry Pi 3b+ || Raspberry Pi 4 || Raspberry Pi Zero 2 
   - Any of these will work. Any Raspberry Pi less powerful is not recommended due to the overhead of the data smoothing algorithm
