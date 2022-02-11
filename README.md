@@ -11,9 +11,9 @@
 - Bluetooth receiver to connect phones for playing music through Raspberry Pi audio output
 
 <p float="center">
-  <img src="screenshots/IMG_5552.PNG" width="325" />
-  <img src="screenshots/IMG_5554.PNG" width="325" /> 
-  <img src="screenshots/IMG_5555.PNG" width="325" />
+  <img src="screenshots/IMG_5552.PNG" width="600" />
+  <img src="screenshots/IMG_5554.PNG" width="600" /> 
+  <img src="screenshots/IMG_5555.PNG" width="600" />
 </p>
 <p float="center">
     <img src="screenshots/IMG_5556.PNG" width="300" />
