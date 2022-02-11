@@ -19,7 +19,7 @@
     <img src="screenshots/IMG_5556.PNG" width="300" />
     <img src="screenshots/IMG_5557.PNG" width="300" />
 </p>
-
+    <img src="screenshots/IMG_5560.jpg" width="600" />
 
 ## Parts List
 - Raspberry Pi 3b+ || Raspberry Pi 4 || Raspberry Pi Zero 2 
@@ -30,7 +30,7 @@
 
 ## Installation
 ### Option 1:
-This is the easier option and provides all features out of the box. In the repo is a disk image of BoatBuddy which can be flashed onto an SD card of sufficient size using the program of your choice (I like Etcher). Once flashed, proceed to the Setup section.
+This is the easier option and provides all features out of the box. <a href="https://www.google.com">At this Google Drive link</a> is a disk image of BoatBuddy which can be flashed onto an SD card of sufficient size using the program of your choice (I like Etcher). Once flashed, proceed to the Setup section.
 
 ### Option 2:
 The hard way.
@@ -38,16 +38,16 @@ The hard way.
 2. Edit the startup file `/etc/rc.local` (`sudo nano /etc/rc.local`) and add these lines before the line `exit 0` to start the webserver and the data collection script on startup. 
     ```
     cd home/pi/boatbuddy
-    python3 manage.py runserver boatbuddy.live:80 &&
-    python3 data.py
+    python3 manage.py runserver boatbuddy.live:80 &
+    python3 data.py &
     ```
     
 3. Install the requirements from the `requirements.txt` file to the global Python libraries: 
     `sudo pip3 install -r requirements.txt`
    - You must run as sudo because the startup script `/etc/rc.local` runs as root on startup.
-   - You may get lots of errors here. Hard to predict. 
+   - You may get lots of errors here. Hard to predict. Work through them one at a time, and raise an Issue if you need help.
 
-4. Follow this guide through step 5, excluding step 6 and beyond, to set up the Raspberry Pi as and access point: https://thepi.io/how-to-use-your-raspberry-pi-as-a-wireless-access-point/ (we do not want to set up forwarding of the wifi traffic to the ethernet port)
+4. Follow this guide through step 5, excluding step 6 and beyond, to set up the Raspberry Pi as an access point: https://thepi.io/how-to-use-your-raspberry-pi-as-a-wireless-access-point/ (we do not want to set up forwarding of the wifi traffic to the ethernet port)
 
 5. Edit the file `/etc/hosts` (`sudo nano /etc/hosts`) and add the below line at the bottom. Replace the IP address with whatever you set as the `static ip_address` when setting up the access point in the `dhcpcd.conf` file. If you followed the steps in the guide exactly, it should be `192.168.0.10`:
 
@@ -71,7 +71,9 @@ Passwords and wifi name could be different. Hope you remembered what you set the
 
 ### Connecting GPS Module
 Wire the GPS module as follows:
-![GPS Breakout](https://cdn-learn.adafruit.com/assets/assets/000/062/852/original/adafruit_products_sensors_uartgps_bb.png?1538430197)
+<div>
+<img src="https://cdn-learn.adafruit.com/assets/assets/000/062/852/original/adafruit_products_sensors_uartgps_bb.png?1538430197" width=600>
+</div>
 
 ## Usage
 
@@ -88,13 +90,14 @@ Wire the GPS module as follows:
 ### Functions
 Note: all functions work in portrait and landscape mode, but landscape fits the screen better
 
-- Tap the Tide data button in the top-left corner to toggle the tide chart 
-  - The Tide data button is replaced by the current speed. Tap to revert back to Speedometer
+- Tap the Tide Data icon in the top-left corner to toggle the tide chart 
+  - The Tide data button is replaced by the current speed.
+  - Tap again to revert back to Speedometer
  
-- Tap the Heading in the top right corner to toggle to the Map.
+- Tap the Heading icon in the top right corner to toggle to the Map.
   - Use pinching and two-fingers to zoom and spin the view.
   - Tap the Lock button to stop the view from being moved to the current position. Useful for panning around the map.
-    - Tap the Lock button again to re-couple the view with the current position.
+    - Tap the Unlock button to re-couple the view with the current position.
   - Tap the Route button to toggle on/off the track history (previous route) from view.
   - Tap the Heading again to revert back to the Speedometer (or tide chart -- whichever was displayed last)
 
@@ -112,18 +115,18 @@ Note: all functions work in portrait and landscape mode, but landscape fits the 
    - Example `[-75.778, 39.332]`
 
 ##### Adding depth soundings, buoys, or other data to the map for a different location:
-1. Navigate to https://charts.noaa.gov/ENCs/ENCS.shtml and download the charts that cover the area you need.
-   - Use the ENC chart locator tool (https://charts.noaa.gov/InteractiveCatalog/nrnc.shtml#mapTabs-2) to determine which charts you need.
-2. Unzip the downloaded file and upload the spatial data file with file extension .000 to https://mygeodata.cloud/converter
-   - Example for `US3SC10M`: Spatial Data File would be located in `ENC_ROOT/US3SC10M/US3SC10M.000`
+1. Navigate to the <a href="https://charts.noaa.gov/ENCs/ENCS.shtml">ENC Data from NOAA</a> and download the charts that cover the area you need.
+   - Use the <a href="https://charts.noaa.gov/InteractiveCatalog/nrnc.shtml#mapTabs-2">ENC chart locator tool</a> to determine which charts you need.
+2. Unzip the downloaded file and upload the spatial data file with file extension .000 to <a href="https://mygeodata.cloud/converter">MyGeoData Cloud Converter</a>
+   - Example for `US3SC10M` Spatial Data File would be located in `ENC_ROOT/US3SC10M/US3SC10M.000`
 3. Select the output format as GEOJSON and convert your data.
-4. Open the `geoconvert.py` file in `/boatbuddy/geojson_formatter/`. Change the `output_name` to any value ending in .json and `input_name` to the file in which you would like to convert.
+4. Open the `geoconverter.py` file in `/boatbuddy/geojson_formatter/`. Change the `output_name` to any value ending in .json and `input_name` to the file in which you would like to convert.
    - *NOTE* - you may have to change the for-loop dictionary keys to fit the data. It's currently set up to read the `SOUNDG.geojson` file but for other files it will be necessary to tweak.
    - To see a list of the Acronym -> Full Name mappings, visit http://www.s-57.com (for example, depth soundings are contained in the `SOUNDG.geojson` file) 
    - This will convert the GEOJSON data to a slightly different format that is required for MapLibre to display.
 6. Save the output file to `/boatbuddy/core/static/core/`
 7. Open the `index.html` file at `/boatbuddy/core/templates/` and scroll to the MapLibre Javascript section (starting around line 185)
-8. Copy a "map.addSource" section up until the semicolon and add it to the list of other "map.addSource" sections.
+8. Copy a `map.addSource(...` section up until the semicolon and add it to the list of other `map.addSource(...` sections.
 9. Change the name to something unique and change the `"data":` property to refer to your new file
    ```
    map.addSource("US3SC10M_SOUNDG", {
@@ -131,7 +134,7 @@ Note: all functions work in portrait and landscape mode, but landscape fits the 
        "data": "{% static 'core/USD3SC10M_SOUNDG.json' %}"
    });
    ```
-10. Copy a "map.addLayer" section up until the smicolon and add it to the list of other "map.addLayer" sections.
+10. Copy a `map.addLayer(...` section up until the smicolon and add it to the list of other `map.addLayer(...` sections.
 11. Change the `"id"` and `"source"` properties to refer back to the source created in step 9, change the `"type"` property to the correct type (depth soundings would be symbols, tracks would be lines, buoys would be symbols etc.) and change the rest of the properties that correspond with your type of layer. 
     ```
      map.addLayer({
@@ -144,7 +147,7 @@ Note: all functions work in portrait and landscape mode, but landscape fits the 
             }
      });
     ```
-   *Note* - other types of layers (for lines or for symbols with a picture instead of "text-field" will have different properties in the `map.addLayer` function. Refer to the other layers already present on the map or visit the Mapbox documentation for more details.
+   *Note* - other types of layers (for lines or for symbols with a picture instead of "text-field" will have different properties in the `map.addLayer(...` function. Refer to the other layers already present on the map or visit the Mapbox documentation (which is the same syntax for MapLibre) for more details.
 
 
 ## Technologies
@@ -161,6 +164,6 @@ Note: all functions work in portrait and landscape mode, but landscape fits the 
 - The site loads but there is no data being sent.
     - Add this line `exec 1>/tmp/rclocal.out 2>&1` to the top of the `/etc/rc.local` file. This will make a log in `/tmp/rclocal.out` where you can investigate the issue futher.
 - Map loads but doesn't have any detail on it (city names, streets, etc.).
-    - Because of space limitations and the large number of files used by the map tiles at different zoom levels, the map only has detailed information for the North East. Anywhere else (such as Florida or West Coast) will display but not have detailed information. To change this is outside of the scope of this tutorial. Please raise an issue if you need help setting up a different area of the country.
+    - Because of space limitations and the large number of files used by the map tiles at different zoom levels, the map only has detailed information for the North East. Anywhere else (such as Florida or West Coast) will display but not have detailed information. To change this is outside of the scope of this document. Please raise an Issue if you need help setting up a different area of the country.
 - Why are you running the default Django http server and not Apache/NGINX/Daphne?
     - A dedicated HTTP server would add an additional layer of abstraction here and additional setup for no gain. Further, the site is "airgapped" and has no connection to the outside world. The security risks here are miniscule. The default Django http server works well in this instance without any further setup required.
