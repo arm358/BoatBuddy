@@ -34,7 +34,7 @@ This is the easier option and provides all features out of the box. In the repo 
 
 ### Option 2:
 The hard way.
-1. Clone the repo and unzip the `boatbuddy.zip` file. Save the /boatbuddy directory to your Raspberry Pi in the /home/pi/ folder (structure should look like /home/pi/boatbuddy)
+1. Clone the repo and unzip the `boatbuddy.zip` file. Save the /boatbuddy directory to your Raspberry Pi in the `/home/pi/` folder (structure should look like `/home/pi/boatbuddy`)
 2. Edit the startup file `/etc/rc.local` (`sudo nano /etc/rc.local`) and add these lines before the line `exit 0` to start the webserver and the data collection script on startup. 
     ```
     cd home/pi/boatbuddy
@@ -100,6 +100,51 @@ Note: all functions work in portrait and landscape mode, but landscape fits the 
 
 - Tap the Power button and confirm to safely shutdown the system
 
+## Configuration
+#### The current configuration is for Ocean City, NJ. If you live or boat there, great! You're good to go. To reconfigure for other cities:
+##### Changing Tide Data for your location
+1. Open `/boatbuddy/Tide Scraping Script/tide_scraper.py` and change the URL and Date variables to your location and desired date range (URL is for api.tidesandcurrents.noaa.gov)
+2. Save the output file `tides.csv` into the main /boatbuddy folder replacing the existing file.
+
+##### Changing the default boat location and Home icon location
+1. Open the `views.py` file in `/boatbuddy/core/`
+2. In the home view, add the coordinates in list form
+   - Example `[-75.778, 39.332]`
+
+##### Adding depth soundings, buoys, or other data to the map for a different location:
+1. Navigate to https://charts.noaa.gov/ENCs/ENCS.shtml and download the charts that cover the area you need.
+   - Use the ENC chart locator tool (https://charts.noaa.gov/InteractiveCatalog/nrnc.shtml#mapTabs-2) to determine which charts you need.
+2. Unzip the downloaded file and upload the spatial data file with file extension .000 to https://mygeodata.cloud/converter
+   - Example for `US3SC10M`: Spatial Data File would be located in `ENC_ROOT/US3SC10M/US3SC10M.000`
+3. Select the output format as GEOJSON and convert your data.
+4. Open the `geoconvert.py` file in `/boatbuddy/geojson_formatter/`. Change the `output_name` to any value ending in .json and `input_name` to the file in which you would like to convert.
+   - *NOTE* - you may have to change the for-loop dictionary keys to fit the data. It's currently set up to read the `SOUNDG.geojson` file but for other files it will be necessary to tweak.
+   - To see a list of the Acronym -> Full Name mappings, visit http://www.s-57.com (for example, depth soundings are contained in the `SOUNDG.geojson` file) 
+   - This will convert the GEOJSON data to a slightly different format that is required for MapLibre to display.
+6. Save the output file to `/boatbuddy/core/static/core/`
+7. Open the `index.html` file at `/boatbuddy/core/templates/` and scroll to the MapLibre Javascript section (starting around line 185)
+8. Copy a "map.addSource" section up until the semicolon and add it to the list of other "map.addSource" sections.
+9. Change the name to something unique and change the `"data":` property to refer to your new file
+   ```
+   map.addSource("US3SC10M_SOUNDG", {
+       "type": 'geojson',
+       "data": "{% static 'core/USD3SC10M_SOUNDG.json' %}"
+   });
+   ```
+10. Copy a "map.addLayer" section up until the smicolon and add it to the list of other "map.addLayer" sections.
+11. Change the `"id"` and `"source"` properties to refer back to the source created in step 9, change the `"type"` property to the correct type (depth soundings would be symbols, tracks would be lines, buoys would be symbols etc.) and change the rest of the properties that correspond with your type of layer. 
+    ```
+     map.addLayer({
+        'id': 'US3SC10M_SOUNDG',
+        'type': 'symbol',
+        'source': 'US3SC10M_SOUNDG',
+        layout: {
+            'text-field': "{depth}",
+            'text-font': ["Open Sans Regular"]
+            }
+     });
+    ```
+   *Note* - other types of layers (for lines or for symbols with a picture instead of "text-field" will have different properties in the `map.addLayer` function. Refer to the other layers already present on the map or visit the Mapbox documentation for more details.
 
 
 ## Technologies
@@ -111,3 +156,11 @@ Note: all functions work in portrait and landscape mode, but landscape fits the 
 - Chart.js for tide chart and speedometer gauge display
 - NOAA ENC data in GeoJSON format for depths, buoy locations, etc.
 - Various open-source Python repos used in websocket script for collecting and sending data
+
+## Issues & Troubleshooting
+- The site loads but there is no data being sent.
+    - Add this line `exec 1>/tmp/rclocal.out 2>&1` to the top of the `/etc/rc.local` file. This will make a log in `/tmp/rclocal.out` where you can investigate the issue futher.
+- Map loads but doesn't have any detail on it (city names, streets, etc.).
+    - Because of space limitations and the large number of files used by the map tiles at different zoom levels, the map only has detailed information for the North East. Anywhere else (such as Florida or West Coast) will display but not have detailed information. To change this is outside of the scope of this tutorial. Please raise an issue if you need help setting up a different area of the country.
+- Why are you running the default Django http server and not Apache/NGINX/Daphne?
+    - A dedicated HTTP server would add an additional layer of abstraction here and additional setup for no gain. Further, the site is "airgapped" and has no connection to the outside world. The security risks here are miniscule. The default Django http server works well in this instance without any further setup required.
