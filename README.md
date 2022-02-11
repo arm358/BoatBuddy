@@ -25,15 +25,15 @@
 - Raspberry Pi 3b+ || Raspberry Pi 4 || Raspberry Pi Zero 2 
   - Any of these will work. Any Raspberry Pi less powerful is not recommended due to the overhead of the data smoothing algorithm
   - If you choose a Raspberry Pi Zero 2, it will work but the Bluetooth audio function will not since it does not have a 3.5mm Audio Output
-- Adafruit GPS Breakout (https://www.adafruit.com/product/746)
+- <a href="https://www.adafruit.com/product/746">Adafruit GPS Breakout<a>
 - Small wires, solder, soldering iron, etc. to turn the GPS Breakout into a HAT.
 
 ## Installation
-### Option 1:
-This is the easier option and provides all features out of the box. <a href="https://www.google.com">At this Google Drive link</a> is a disk image of BoatBuddy which can be flashed onto an SD card of sufficient size using the program of your choice (I like Etcher). Once flashed, proceed to the Setup section.
+### Option 1: BoatBuddy Image
+This is the easier option and provides all features out of the box. <a href="https://drive.google.com/file/d/1ErJKru1oLIb-ajRgO1gLguGSWjRruWyY/view?usp=sharing">At this Google Drive link</a> is a disk image of BoatBuddy which can be flashed onto an SD card of sufficient size using the program of your choice (I like Etcher). Once flashed, proceed to the Setup section.
 
-### Option 2:
-The hard way.
+### Option 2: The Hard Way.
+*There are many small files for the map tiles (like 400k+). This may take a long time to clone!!*
 1. Clone the repo and unzip the `boatbuddy.zip` file. Save the /boatbuddy directory to your Raspberry Pi in the `/home/pi/` folder (structure should look like `/home/pi/boatbuddy`)
 2. Edit the startup file `/etc/rc.local` (`sudo nano /etc/rc.local`) and add these lines before the line `exit 0` to start the webserver and the data collection script on startup. 
     ```
