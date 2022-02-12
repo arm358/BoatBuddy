@@ -1,0 +1,8 @@
+These commands are used to unpack OpenStreetMaps tiles into .pbf files to be used in OpenMapBox
+
+mbutil usage:
+
+./mb-util --image_format=pbf countries.mbtiles countries
+gzip -d -r -S .pbf *
+find . -type f -exec mv '{}' '{}'.pbf \;
+

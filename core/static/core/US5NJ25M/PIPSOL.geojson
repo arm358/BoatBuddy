@@ -1,0 +1,13 @@
+{
+"type": "FeatureCollection",
+"name": "PIPSOL",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "RCID": 632, "PRIM": 2, "GRUP": 2, "OBJL": 94, "RVER": 1, "AGEN": 550, "FIDN": 37005415, "FIDS": 50, "LNAM": "02260234A8670032", "SCAMIN": 44999, "SORDAT": "20170406", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "LineString", "coordinates": [ [ -74.4416671, 39.3514503 ], [ -74.4413323, 39.3509278 ] ] } },
+{ "type": "Feature", "properties": { "RCID": 633, "PRIM": 2, "GRUP": 2, "OBJL": 94, "RVER": 1, "AGEN": 550, "FIDN": 37005413, "FIDS": 50, "LNAM": "02260234A8650032", "SCAMIN": 44999, "SORDAT": "20170406", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "LineString", "coordinates": [ [ -74.4207436, 39.3570262 ], [ -74.4204042, 39.3565612 ] ] } },
+{ "type": "Feature", "properties": { "RCID": 634, "PRIM": 2, "GRUP": 2, "OBJL": 94, "RVER": 1, "AGEN": 550, "FIDN": 37005411, "FIDS": 50, "LNAM": "02260234A8630032", "SCAMIN": 44999, "SORDAT": "20170406", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "LineString", "coordinates": [ [ -74.4280954, 39.3548484 ], [ -74.4279658, 39.3544181 ] ] } },
+{ "type": "Feature", "properties": { "RCID": 635, "PRIM": 2, "GRUP": 2, "OBJL": 94, "RVER": 1, "AGEN": 550, "FIDN": 37005416, "FIDS": 50, "LNAM": "02260234A8680032", "CATPIP": "4", "SCAMIN": 44999, "SORDAT": "20170406", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "LineString", "coordinates": [ [ -74.4154537, 39.3598731 ], [ -74.4150411, 39.3592974 ] ] } },
+{ "type": "Feature", "properties": { "RCID": 636, "PRIM": 2, "GRUP": 2, "OBJL": 94, "RVER": 1, "AGEN": 550, "FIDN": 37005412, "FIDS": 50, "LNAM": "02260234A8640032", "SCAMIN": 44999, "SORDAT": "20170406", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "LineString", "coordinates": [ [ -74.4246833, 39.3558204 ], [ -74.4244166, 39.3554442 ] ] } },
+{ "type": "Feature", "properties": { "RCID": 637, "PRIM": 2, "GRUP": 2, "OBJL": 94, "RVER": 1, "AGEN": 550, "FIDN": 37005414, "FIDS": 50, "LNAM": "02260234A8660032", "SCAMIN": 44999, "SORDAT": "20170406", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "LineString", "coordinates": [ [ -74.4187799, 39.3578692 ], [ -74.4184231, 39.357364 ] ] } }
+]
+}

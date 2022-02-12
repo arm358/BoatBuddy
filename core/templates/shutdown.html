@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset=" utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <!-- Bootstrap -->
+    <link rel="stylesheet" type="text/css" href="{% static 'core/bootstrap/css/bootstrap.min.css' %}">
+
+    <!-- chart.js -->
+    <script src="{% static 'core/chartjs/package/dist/chart.js' %}"></script>
+    <script src="{% static 'core/chartjs-plugin-annotation.js' %}"></script>
+
+    <!-- speedo chart -->
+    <script src="{% static 'core/gauge.js' %}"></script>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'core/core.css' %}">
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="{% static 'core/fafa/css/all.css' %}">
+
+    <!-- Mapbox Stuff -->
+    <script src="{% static 'core/maplibre-gl.js' %}"></script>
+    <link href="{% static 'core/maplibre-gl.css' %}" rel='stylesheet' />
+
+    <title>BoatBuddy</title>
+
+</head>
+
+
+
+<body class="bg-dark flex-grow-1">
+
+    <h2 class="text-light text-center">Shutting down...</h2>
+</body>
+
+</html>

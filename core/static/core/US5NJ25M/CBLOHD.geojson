@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "CBLOHD",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "RCID": 355, "PRIM": 2, "GRUP": 2, "OBJL": 21, "RVER": 1, "AGEN": 550, "FIDN": 37005065, "FIDS": 50, "LNAM": "02260234A7090032", "CATCBL": 1, "VERCLR": 7.9, "INFORM": "Cables", "SCAMIN": 21999, "SORDAT": "20050600", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "LineString", "coordinates": [ [ -74.4441275, 39.3751523 ], [ -74.4433074, 39.3748892 ] ] } }
+]
+}

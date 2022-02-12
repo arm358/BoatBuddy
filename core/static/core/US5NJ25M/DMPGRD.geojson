@@ -1,0 +1,8 @@
+{
+"type": "FeatureCollection",
+"name": "DMPGRD",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "RCID": 1751, "PRIM": 1, "GRUP": 2, "OBJL": 48, "RVER": 1, "AGEN": 550, "FIDN": 37005508, "FIDS": 50, "LNAM": "02260234A8C40032", "CATDPG": "5", "INFORM": "Danger explosives, Reported in 1961", "SCAMIN": 29999, "SORDAT": "19610000", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "Point", "coordinates": [ -74.4145509, 39.3433784 ] } }
+]
+}

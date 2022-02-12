@@ -1,0 +1,10 @@
+{
+"type": "FeatureCollection",
+"name": "BOYSPP",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "RCID": 250, "PRIM": 1, "GRUP": 2, "OBJL": 19, "RVER": 1, "AGEN": 550, "FIDN": 929807548, "FIDS": 2030, "LNAM": "0226376BBCBC07EE", "LNAM_REFS": [ "02261FA0859107EE" ], "FFPT_RIND": [ 2 ], "BOYSHP": 4, "CATSPM": "27", "COLOUR": "6", "OBJNAM": "Mullica River Lighted Research Buoy A", "PEREND": "--1130", "PERSTA": "--0401", "STATUS": "5,8", "SCAMIN": 89999, "SORDAT": "20190430", "SORIND": "US,US,reprt,5thCGD,LNM 18\/19" }, "geometry": { "type": "Point", "coordinates": [ -74.4009722, 39.5350972 ] } },
+{ "type": "Feature", "properties": { "RCID": 251, "PRIM": 1, "GRUP": 2, "OBJL": 19, "RVER": 1, "AGEN": 550, "FIDN": 37025025, "FIDS": 50, "LNAM": "02260234F5010032", "BOYSHP": 2, "CATSPM": "27", "COLOUR": "2,1,2", "COLPAT": "2", "OBJNAM": "Little Egg Harbor Buoy A", "STATUS": "1", "SCAMIN": 89999, "SORDAT": "200512", "SORIND": "US,US,graph,Chart 12316" }, "geometry": { "type": "Point", "coordinates": [ -74.2552056, 39.5660404 ] } },
+{ "type": "Feature", "properties": { "RCID": 252, "PRIM": 1, "GRUP": 2, "OBJL": 19, "RVER": 1, "AGEN": 550, "FIDN": 37022340, "FIDS": 50, "LNAM": "02260234EA840032", "LNAM_REFS": [ "02260234EA850032" ], "FFPT_RIND": [ 2 ], "BOYSHP": 4, "CATSPM": "27", "COLOUR": "6", "OBJNAM": "Mullica River Lighted Buoy R", "STATUS": "8", "SCAMIN": 89999, "SORDAT": "20170406", "SORIND": "US,US,graph,Chart 12316" }, "geometry": { "type": "Point", "coordinates": [ -74.4599049, 39.5485615 ] } }
+]
+}

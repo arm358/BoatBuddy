@@ -1,0 +1,9 @@
+{
+"type": "FeatureCollection",
+"name": "AIRARE",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "RCID": 2237, "PRIM": 3, "GRUP": 2, "OBJL": 2, "RVER": 1, "AGEN": 550, "FIDN": 36801153, "FIDS": 50, "LNAM": "022602318A810032", "OBJNAM": "Ocean City Municipal Airport", "SCAMIN": 44999, "SORDAT": "200512", "SORIND": "US,US,graph,Chart 12316" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -74.611226, 39.2606201 ], [ -74.6113679, 39.2607409 ], [ -74.6037508, 39.2663208 ], [ -74.6035874, 39.2662093 ], [ -74.611226, 39.2606201 ] ] ] } },
+{ "type": "Feature", "properties": { "RCID": 2238, "PRIM": 3, "GRUP": 2, "OBJL": 2, "RVER": 1, "AGEN": 550, "FIDN": 36982417, "FIDS": 50, "LNAM": "022602344E910032", "OBJNAM": "Bader Field", "SCAMIN": 44999, "SORDAT": "200512", "SORIND": "US,US,graph,Chart 12316" }, "geometry": { "type": "Polygon", "coordinates": [ [ [ -74.4624152, 39.3622217 ], [ -74.4535706, 39.3606504 ], [ -74.4526671, 39.3618884 ], [ -74.4523677, 39.3617983 ], [ -74.4531489, 39.360572 ], [ -74.4522354, 39.3603858 ], [ -74.4523352, 39.3601425 ], [ -74.4532777, 39.3603262 ], [ -74.4566546, 39.3554705 ], [ -74.456954, 39.3555984 ], [ -74.4536736, 39.3603893 ], [ -74.462464, 39.3619407 ], [ -74.4624152, 39.3622217 ] ] ] } }
+]
+}

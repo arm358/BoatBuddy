@@ -1,0 +1,11 @@
+{
+"type": "FeatureCollection",
+"name": "LNDMRK",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "RCID": 358, "PRIM": 1, "GRUP": 2, "OBJL": 74, "RVER": 1, "AGEN": 550, "FIDN": 37005465, "FIDS": 50, "LNAM": "02260234A8990032", "CATLMK": "17", "CONVIS": 1, "SCAMIN": 44999, "SORDAT": "20050600", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "Point", "coordinates": [ -74.4436656, 39.3527788 ] } },
+{ "type": "Feature", "properties": { "RCID": 359, "PRIM": 1, "GRUP": 2, "OBJL": 74, "RVER": 1, "AGEN": 550, "FIDN": 37005466, "FIDS": 50, "LNAM": "02260234A89A0032", "CATLMK": "17", "CONVIS": 1, "FUNCTN": "33", "STATUS": "4", "INFORM": "House", "SCAMIN": 44999, "SORDAT": "20050600", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "Point", "coordinates": [ -74.4141333, 39.3663215 ] } },
+{ "type": "Feature", "properties": { "RCID": 360, "PRIM": 1, "GRUP": 2, "OBJL": 74, "RVER": 1, "AGEN": 550, "FIDN": 37005457, "FIDS": 50, "LNAM": "02260234A8910032", "CATLMK": "17", "CONVIS": 1, "SCAMIN": 44999, "SORDAT": "20010727", "SORIND": "US,US,graph,DD-6467" }, "geometry": { "type": "Point", "coordinates": [ -74.4242139, 39.3785113 ] } },
+{ "type": "Feature", "properties": { "RCID": 361, "PRIM": 1, "GRUP": 2, "OBJL": 74, "RVER": 1, "AGEN": 550, "FIDN": 37005460, "FIDS": 50, "LNAM": "02260234A8940032", "CATLMK": "3,17", "CONVIS": 1, "SCAMIN": 44999, "SORDAT": "20050600", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "Point", "coordinates": [ -74.4317916, 39.357536 ] } }
+]
+}
