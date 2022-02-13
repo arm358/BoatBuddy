@@ -192,6 +192,7 @@ while True:
             while not connected: # connect to the websocket
                 try:
                     ws.connect(wsaddress)
+                    connected = True
                 except:
                     pass
             if counter % 100 == 0: #only pulls tide data every 100 loops == every 100 seconds
@@ -220,6 +221,7 @@ while True:
             print(payload) #print data to console for further review. This gets stored in /tmp/rclocal.out
             ws.send(json.dumps(payload)) #send data over websocket
             counter += 1 #counter for tide data loop
-    except BrokenPipeError:
+    except BrokenPipeError as e:
+        print(e)
         connected = False #reset the websocket connection and retry to connect
         continue
