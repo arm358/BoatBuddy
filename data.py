@@ -221,7 +221,6 @@ while True:
             print(payload) #print data to console for further review. This gets stored in /tmp/rclocal.out
             ws.send(json.dumps(payload)) #send data over websocket
             counter += 1 #counter for tide data loop
-    except BrokenPipeError as e:
-        print(e)
+    except Exception as e:
         connected = False #reset the websocket connection and retry to connect
         continue
