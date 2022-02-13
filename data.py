@@ -129,8 +129,8 @@ def gps_converter(lat, lon, track_history):
 
         for item in outline:
             track_history.append(item)
-        lat = track_history[-5][1]
-        lon = track_history[-5][0]
+        lat = round(track_history[-5][1],5)
+        lon = round(track_history[-5][0],5)
         return lat, lon, track_history
     except:
         return lat, lon, track_history
