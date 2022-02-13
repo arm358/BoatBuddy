@@ -128,9 +128,11 @@ def gps_converter(lat, lon, track_history):
         track_history = track_history[:-15]
 
         for item in outline:
+            item[0] = round(item[0],5)
+            item[1] = round(item[1],5)
             track_history.append(item)
-        lat = round(track_history[-5][1],5)
-        lon = round(track_history[-5][0],5)
+        lat = track_history[-5][1]
+        lon = track_history[-5][0]
         return lat, lon, track_history
     except:
         return lat, lon, track_history
@@ -224,3 +226,4 @@ while True:
     except Exception as e:
         connected = False #reset the websocket connection and retry to connect
         continue
+
