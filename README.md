@@ -168,3 +168,7 @@ Note: all functions work in portrait and landscape mode, but landscape fits the 
     - Because of space limitations and the large number of files used by the map tiles at different zoom levels, the map only has detailed information for the North East. Anywhere else (such as Florida or West Coast) will display but not have detailed information. To change this is outside of the scope of this document. Please raise an Issue if you need help setting up a different area of the country.
 - Why are you running the default Django http server and not Apache/NGINX/Daphne?
     - A dedicated HTTP server would add an additional layer of abstraction here and additional setup for no gain. Further, the site is "airgapped" and has no connection to the outside world. The security risks here are miniscule. The default Django http server works well in this instance without any further setup required.
+
+    
+<a href="https://www.openstreetmap.org/copyright">Map tiles courtesy of © OpenStreetMap contributors</a>
+    
