@@ -31,7 +31,7 @@
 
 ## Installation
 ### Option 1: BoatBuddy Image
-This is the easier option and provides all features out of the box. <a href="">At this Google Drive link</a> is a disk image of BoatBuddy. Unzip the file and flash it onto an SD card of sufficient size using the program of your choice (I like Etcher). Once flashed, proceed to the Setup section.
+This is the easier option and provides all features out of the box. <a href="https://drive.google.com/file/d/1c5GhIEyAqSfLYmdNYYjCwC2m7QHpUDN7/view?usp=sharing">At this Google Drive link</a> is a disk image of BoatBuddy. Unzip the file and flash it onto an SD card of sufficient size using the program of your choice (I like Etcher). Once flashed, proceed to the Setup section.
 
 ### Option 2: The Hard Way.
 1. Clone the repo to your home directory on your Raspberry Pi (structure should look like `/home/pi/BoatBuddy`)
