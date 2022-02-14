@@ -20,7 +20,7 @@
   <img src="screenshots/Portrait_Map.gif" width="300" />
     </div
 </div>
-    <img src="screenshots/IMG_5560.jpg" width="600" />
+    <img src="screenshots/IMG_5588.jpg" width="600" />
 
 ## Parts List
 - Raspberry Pi 3b+ || Raspberry Pi 4 || Raspberry Pi Zero 2 
