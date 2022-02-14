@@ -18,6 +18,7 @@
   <div>
   <img src="screenshots/Portrait_Speedometer.gif" width="300" />
   <img src="screenshots/Portrait_Map.gif" width="300" />
+    <img src="screenshots/IMG_5556.jpg" width="300" />
     </div
 </div>
     <img src="screenshots/IMG_5588.jpg" width="600" />
