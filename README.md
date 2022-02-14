@@ -31,7 +31,7 @@
 
 ## Installation
 ### Option 1: BoatBuddy Image
-This is the easier option and provides all features out of the box. <a href="https://drive.google.com/file/d/1c5GhIEyAqSfLYmdNYYjCwC2m7QHpUDN7/view?usp=sharing">At this Google Drive link</a> is a disk image of BoatBuddy. Unzip the file and flash it onto an SD card of sufficient size using the program of your choice (I like Etcher). Once flashed, proceed to the Setup section.
+This is the easier option and provides all features out of the box. <a href="https://drive.google.com/file/d/1c5GhIEyAqSfLYmdNYYjCwC2m7QHpUDN7/view?usp=sharing">At this Google Drive link</a> is a disk image of BoatBuddy (too large to host on GitHub). Unzip the file and flash it onto an SD card of sufficient size using the program of your choice (I like Etcher). Once flashed, proceed to the Setup section.
 
 ### Option 2: The Hard Way.
 1. Get the repo: Clone the repo to your home directory on your Raspberry Pi (structure should look like `/home/pi/BoatBuddy`)
@@ -41,7 +41,7 @@ This is the easier option and provides all features out of the box. <a href="htt
     python3 manage.py runserver boatbuddy.live:80 &
     python3 data.py &
     ```
-4. Get the maptiles for hosting the map offline: <a href="https://drive.google.com/file/d/1SMx4_JsFPr93qcJR4syc7A9RtJXIVq5T/view?usp=sharing">Download the zip file containing all of the maptiles</a> (too large to host on Github for free). This is required to host the map offline. Unzip the `ne.zip` file into `boatbuddy/core/static/core` (440k+ individual .pbf files!). The full path on the Raspberry Pi should look like `/home/pi/boatbuddy/core/static/core/ne/...`
+4. Get the maptiles for hosting the map offline: <a href="https://drive.google.com/file/d/1SMx4_JsFPr93qcJR4syc7A9RtJXIVq5T/view?usp=sharing">Download the zip file containing all of the maptiles</a> (also too large to host on Github). This is required to host the map offline. Unzip the `ne.zip` file into `boatbuddy/core/static/core` (440k+ individual .pbf files!). The full path on the Raspberry Pi should look like `/home/pi/boatbuddy/core/static/core/ne/...`
 5. Install Python dependencies: Install the requirements from the `requirements.txt` file to the global Python libraries: 
     `sudo pip3 install -r requirements.txt`
    - You must run using sudo because the startup script `/etc/rc.local` runs as root on startup.
