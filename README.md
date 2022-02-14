@@ -160,7 +160,7 @@ Note: all functions work in portrait and landscape mode, but landscape fits the 
 - NOAA ENC data in GeoJSON format for depths, buoy locations, etc.
 - Various open-source Python repos used in websocket script for collecting, manipulating, and sending data
 
-## Issues & Troubleshooting
+## Issues / Troubleshooting / FAQ
 - The site loads but there is no data being sent.
     - Add this line `exec 1>/tmp/rclocal.out 2>&1` to the top of the `/etc/rc.local` file. This will make a log in `/tmp/rclocal.out` where you can investigate the issue futher.
 - Map loads but doesn't have any detail on it (city names, streets, etc.).
