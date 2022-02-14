@@ -47,7 +47,7 @@ This is the easier option and provides all features out of the box. <a href="htt
    - You must run using sudo because the startup script `/etc/rc.local` runs as root on startup.
    - You may get lots of errors here. Hard to predict. Work through them one at a time, and raise an Issue if you need help.
 
-6. Follow this guide through step 5, excluding step 6 and beyond, to set up the Raspberry Pi as an access point: https://thepi.io/how-to-use-your-raspberry-pi-as-a-wireless-access-point/ (we do not want to set up forwarding of the wifi traffic to the ethernet port)
+6. <a href="https://thepi.io/how-to-use-your-raspberry-pi-as-a-wireless-access-point/">Follow this guide</a> through step 5, excluding step 6 and beyond, to set up the Raspberry Pi as an access point:  (we do not want to set up forwarding of the wifi traffic to the ethernet port)
 
 7. Edit the file `/etc/hosts` (`sudo nano /etc/hosts`) and add the below line at the bottom. Replace the IP address with whatever you set as the `static ip_address` when setting up the access point in the `dhcpcd.conf` file. If you followed the steps in the guide exactly, it should be `192.168.0.10`:
 
