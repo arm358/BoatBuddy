@@ -38,6 +38,7 @@
 <script>
     let coupled = true;
     let route = true;
+    let knots = true;
     let socket = new WebSocket('ws://boatbuddy.live/ws/data/');
     socket.onopen = function (e) {
         console.log('Connection established');
@@ -60,7 +61,9 @@
         console.log(e.data);
         var recData = JSON.parse(e.data);
 
-        var speed = recData.speed;
+        var mph = recData.mph;
+        var knts = recData.knts;
+        var kph = recData.kph;
         var direction = recData.direction;
         var heading = recData.heading;
         var depth = recData.depth;
@@ -72,7 +75,13 @@
         var lon = recData.lon;
         var track = recData.track;
         document.getElementById("speed").innerHTML = "";
-        document.getElementById("speed").innerHTML = Math.floor(speed);
+        if (knots){
+            document.getElementById("speed").innerHTML = Math.floor(knts);
+            configSpeed.data.current = knts;
+        } else {
+            document.getElementById("speed").innerHTML = Math.floor(mph);
+            configSpeed.data.current = mph;
+        };
         document.getElementById("direction").innerHTML = direction;
         document.getElementById("heading").innerHTML = heading;
         document.getElementById("tide_type").innerHTML = tide_type;
@@ -81,7 +90,7 @@
         document.getElementById("dirarrow").style.transform = "rotate(" + heading + "deg)";
 
 
-        configSpeed.data.current = speed;
+        
         window.speed.update();
 
 
@@ -502,7 +511,7 @@
             },
             "title": {
                 "display": true,
-                "text": "MPH",
+                "text": "KNTS",
                 "position": "bottom",
                 "titleTextColor": "rgba(255, 255, 255, 1)",
             },
@@ -596,6 +605,7 @@
     document.getElementById("unlock").addEventListener("click", couple_toggle);
     document.getElementById("power").addEventListener("click", shutdown);
     document.getElementById("route").addEventListener("click", route_toggle);
+    document.getElementById("chart-speed").addEventListener("click", speed_unit_toggle);
 
     function shutdown() {
         if (confirm("Shutdown BoatBuddy?")) {
@@ -700,6 +710,18 @@
             route = true;
             map.setLayoutProperty("track_history", "visibility", "visible");
             toggle.style.color = "red";
+
+        }
+
+
+    };
+    function speed_unit_toggle() {
+        if (knots) {
+            knots = false;
+            configSpeed.options.title.text = "MPH"
+        } else {
+            knots = true;
+            configSpeed.options.title.text = "KNTS"
 
         }
 

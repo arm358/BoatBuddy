@@ -11,7 +11,9 @@ class DashboardConsumer(AsyncWebsocketConsumer):
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
-        speed = text_data_json["speed"]
+        mph = text_data_json["mph"]
+        knts = text_data_json["knts"]
+        kph = text_data_json["kph"]
         direction = text_data_json["direction"]
         heading = text_data_json["heading"]
         depth = text_data_json["depth"]
@@ -29,7 +31,9 @@ class DashboardConsumer(AsyncWebsocketConsumer):
             self.group_name,
             {
                 "type": "data_pusher",
-                "speed": speed,
+                "mph": mph,
+                "knts": knts,
+                "kph": kph,
                 "direction": direction,
                 "heading": heading,
                 "depth": depth,
@@ -50,7 +54,9 @@ class DashboardConsumer(AsyncWebsocketConsumer):
         await self.channel_layer.group_discard(self.group_name, self.channel_name)
 
     async def data_pusher(self, event):
-        speed = event["speed"]
+        mph = event["mph"]
+        knts = event["knts"]
+        kph = event["kph"]
         direction = event["direction"]
         heading = event["heading"]
         depth = event["depth"]
@@ -67,7 +73,9 @@ class DashboardConsumer(AsyncWebsocketConsumer):
         await self.send(
             json.dumps(
                 {
-                    "speed": speed,
+                    "mph": mph,
+                    "knts": knts,
+                    "kph": kph,
                     "direction": direction,
                     "heading": heading,
                     "depth": depth,

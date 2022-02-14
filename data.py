@@ -60,6 +60,10 @@ def knots_to_mph(knots):
     mph = knots * 1.151
     return mph
 
+def knots_to_kph(knots):
+    """ conver knots to kph """
+    kph = knots * 1.852
+    return kph
 
 def gmt_to_est(now):
     """since GPS time is GMT without daylight savings, converts current time to eastern and accounts
@@ -205,7 +209,9 @@ while True:
             lat, lon, track_history = gps_converter(gps.latitude, gps.longitude, track_history)
             #this is the data package send over websocket and rendered in the browser
             payload = {
-                        "speed": knots_to_mph(float(gps.speed_knots)),
+                        "mph": knots_to_mph(float(gps.speed_knots)),
+                        "knts": float(gps.speed_knots),
+                        "kph": knots_to_kph(float(gps.speed_knots)),
                         "direction": get_cardinal(gps.track_angle_deg),
                         "heading": heading_cleanser(gps.track_angle_deg),
                         "depth": 0,
