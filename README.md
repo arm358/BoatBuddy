@@ -31,10 +31,9 @@
 
 ## Installation
 ### Option 1: BoatBuddy Image
-This is the easier option and provides all features out of the box. <a href="https://drive.google.com/file/d/1ErJKru1oLIb-ajRgO1gLguGSWjRruWyY/view?usp=sharing">At this Google Drive link</a> is a disk image of BoatBuddy which can be flashed onto an SD card of sufficient size using the program of your choice (I like Etcher). Once flashed, proceed to the Setup section.
+This is the easier option and provides all features out of the box. <a href="">At this Google Drive link</a> is a disk image of BoatBuddy. Unzip the file and flash it onto an SD card of sufficient size using the program of your choice (I like Etcher). Once flashed, proceed to the Setup section.
 
 ### Option 2: The Hard Way.
-*There are many small files for the map tiles (like 400k+). This may take a long time to clone!!*
 1. Clone the repo to your home directory on your Raspberry Pi (structure should look like `/home/pi/BoatBuddy`)
 2. Edit the startup file `/etc/rc.local` (`sudo nano /etc/rc.local`) and add these lines before the line `exit 0` to start the webserver and the data collection script on startup. 
     ```
@@ -42,10 +41,10 @@ This is the easier option and provides all features out of the box. <a href="htt
     python3 manage.py runserver boatbuddy.live:80 &
     python3 data.py &
     ```
-4. Unzip the `ne.zip` file in `/core/static/core` (440k+ individual Map Tile files!). The full path should look like `/home/pi/boatbuddy/core/static/core/ne/...`
+4. <a href="https://drive.google.com/file/d/1SMx4_JsFPr93qcJR4syc7A9RtJXIVq5T/view?usp=sharing">Download the zip file containing all of the maptiles</a> (too large to host on Github for free). This is required to host the map offline. Unzip the `ne.zip` file into `boatbuddy/core/static/core` (440k+ individual .pbf files!). The full path on the Raspberry Pi should look like `/home/pi/boatbuddy/core/static/core/ne/...`
 5. Install the requirements from the `requirements.txt` file to the global Python libraries: 
     `sudo pip3 install -r requirements.txt`
-   - You must run as sudo because the startup script `/etc/rc.local` runs as root on startup.
+   - You must run using sudo because the startup script `/etc/rc.local` runs as root on startup.
    - You may get lots of errors here. Hard to predict. Work through them one at a time, and raise an Issue if you need help.
 
 6. Follow this guide through step 5, excluding step 6 and beyond, to set up the Raspberry Pi as an access point: https://thepi.io/how-to-use-your-raspberry-pi-as-a-wireless-access-point/ (we do not want to set up forwarding of the wifi traffic to the ethernet port)
