@@ -150,15 +150,15 @@ Note: all functions work in portrait and landscape mode, but landscape fits the 
    *Note* - other types of layers (for lines or for symbols with a picture instead of "text-field" will have different properties in the `map.addLayer(...` function. Refer to the other layers already present on the map or visit the Mapbox documentation (which is the same syntax for MapLibre) for more details.
 
 
-## Technologies
+## How It Works
 #### Various technologies, open source repos, and free data were used on this project:
-- Django as back-end framework for server
-- Django-channels for sending GPS data to front-end clients via websockets
-- MapLibre for mapping (open source fork of Mapbox)
-- Bulma CSS framework for styling
+- Django as back-end framework for HTTP server
+- Django-Channels for sending GPS data to front-end clients via websockets
+- MapLibre for displaying interactive map in Javascript (open source fork of Mapbox)
 - Chart.js for tide chart and speedometer gauge display
+- Bulma CSS framework for styling
 - NOAA ENC data in GeoJSON format for depths, buoy locations, etc.
-- Various open-source Python repos used in websocket script for collecting and sending data
+- Various open-source Python repos used in websocket script for collecting, manipulating, and sending data
 
 ## Issues & Troubleshooting
 - The site loads but there is no data being sent.
