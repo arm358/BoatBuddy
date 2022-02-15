@@ -4,7 +4,7 @@
 
 ## Features
 - Navigational map showing current location, heading, location history, depths, buoys, and recommended track
-- Speedometer showing current speed via GPS satellite data
+- Speedometer showing current speed via GPS satellite data (toggle between Knots and MPH)
 - Tide table showing high and low tides for next 8 periods
 - Standalone access-point and self-hosted -- no internet connection required
 - Accessible via any browser @ http://boatbuddy.live with ability for many simultaneous connections
@@ -94,6 +94,9 @@ Note: all functions work in portrait and landscape mode, but landscape fits the 
 - Tap the Tide Data icon in the top-left corner to toggle the tide chart 
   - The Tide data button is replaced by the current speed.
   - Tap again to revert back to Speedometer
+
+- Tap anywhere on the Speedometer chart to change to MPH instead of knots.
+  - Tap again to revert back to knots
  
 - Tap the Heading icon in the top right corner to toggle to the Map.
   - Use pinching and two-fingers to zoom and spin the view.
