@@ -1,8 +1,7 @@
+from django.contrib import messages
 import json
 import os
 import uuid
-from django.contrib import messages
-
 
 mapping = {
     "Depth Areas": "DEPARE",

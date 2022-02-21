@@ -252,7 +252,7 @@
                         <i class="fa fa-anchor has-text-info is-size-6 mr-2"></i>Default Markers
                     </div>
                     <div class="panel-block has-background-light py-3">
-                        <div class="columns is-multiline is-centered is-vcentered is-mobile">
+                        <div class="columns is-multiline is-centered is-vcentered is-fullwidth">
                             <div class="column">
                                 <div class="box">
                                     <div class="is-align-items-center is-size-5">
@@ -265,26 +265,30 @@
                                         {% csrf_token %}
                                         <input type="hidden" name="source" value="home" />
                                         <input type="hidden" name="name" value="home" />
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Latitude</th>
-                                                    <th>Longitude</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <th>
-                                                        <input class="input" type="number" name="latitude" size="9"
-                                                            value="{{home_marker.latitude}}">
-                                                    </th>
-                                                    <th>
-                                                        <input class="input" type="number" name="longitude" size="9"
-                                                            value="{{home_marker.longitude}}">
-                                                    </th>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <div style="display:grid;">
+                                            <div class="column table-container">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Latitude</th>
+                                                            <th>Longitude</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <th>
+                                                                <input class="input is-small" type="number" name="latitude"
+                                                                    size="9" value="{{home_marker.latitude}}">
+                                                            </th>
+                                                            <th>
+                                                                <input class="input is-small" type="number" name="longitude"
+                                                                    size="9" value="{{home_marker.longitude}}">
+                                                            </th>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                         <div class="control mt-5 mb-3">
                                             <button type="submit" class="button is-info is-fullwidth">Submit</button>
                                         </div>
@@ -302,27 +306,30 @@
                                     <form method="post" enctype="multipart/form-data">
                                         {% csrf_token %}
                                         <input type="hidden" name="source" value="default" />
-
-                                        <table class="table">
-                                            <thead>
-                                                <tr>
-                                                    <th>Latitude</th>
-                                                    <th>Longitude</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>
-                                                        <input class="input" type="number" name="latitude" size="9"
-                                                            value="{{default_marker.latitude}}">
-                                                    </td>
-                                                    <td>
-                                                        <input class="input" type="number" name="longitude" size="9"
-                                                            value="{{default_marker.longitude}}">
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                        <div style="display:grid;">
+                                            <div class="column table-container">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Latitude</th>
+                                                            <th>Longitude</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>
+                                                                <input class="input is-small" type="number" name="latitude"
+                                                                    size="9" value="{{default_marker.latitude}}">
+                                                            </td>
+                                                            <td>
+                                                                <input class="input is-small" type="number" name="longitude"
+                                                                    size="9" value="{{default_marker.longitude}}">
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
                                         <div class="control mt-5 mb-3">
                                             <button type="submit" class="button is-info is-fullwidth">Submit</button>
                                         </div>
@@ -336,56 +343,60 @@
                         <i class="fa fa-plus has-text-success is-size-6 mr-2"></i>Add Custom Markers
                     </div>
                     <div class="panel-block has-background-light">
-                        <div class="table-container">
-                            <table class="table is-hoverable has-background-light is-fullwidth">
-                                <thead>
-                                    <tr>
-                                        <th><i class="fa fa-map-pin has-text-danger"></i></th>
-                                        <th>Name</th>
-                                        <th>Latitude</th>
-                                        <th>Longitude</th>
-                                        <th>Description</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody id="markertable">
-                                    <tr id="newmarker">
-                                        <form hx-post="{% url 'add_marker'%}" hx-target="#newmarker"
-                                            hx-encoding="multipart/form-data" hx-swap="afterend swap:1s">
-                                            <input type="hidden" name="source" value="customize" />
-                                            <td class="has-text-centered"><i class="fa fa-map-pin has-text-success"></i>
+                        <div style="display:grid;">
+                            <div class="table-container">
+                                <table class="table is-hoverable has-background-light">
+                                    <thead>
+                                        <tr>
+                                            <th><i class="fa fa-map-pin has-text-danger"></i></th>
+                                            <th>Name</th>
+                                            <th>Latitude</th>
+                                            <th>Longitude</th>
+                                            <th>Description</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="markertable">
+                                        <tr id="newmarker">
+                                            <form hx-post="{% url 'add_marker'%}" hx-target="#newmarker"
+                                                hx-encoding="multipart/form-data" hx-swap="afterend swap:1s">
+                                                <input type="hidden" name="source" value="customize" />
+                                                <td class="has-text-centered"><i
+                                                        class="fa fa-map-pin has-text-success"></i>
+                                                </td>
+                                                <td><input class="input" type="text" name="name" size="10"
+                                                        placeholder="Fishing Spot..."></td>
+                                                <td><input class="input" type="number" step=".00001" min="-90" max="90"
+                                                        name="latitude" size="7" placeholder="34.589"></td>
+                                                <td><input class="input" type="number" step=".00001" min="-90" max="90"
+                                                        name="longitude" size="7" placeholder="-78.302"></td>
+                                                <td><input class="input" type="text" name="caption" size="15"
+                                                        placeholder="Caught monster bass here!"></td>
+                                                <td><button type="submit" class="button is-light is-small"
+                                                        onclick="remove_marker_table_message()"><i
+                                                            class="fa fa-plus has-text-success"></i></button></td>
+                                            </form>
+                                        </tr>
+                                        {% for marker in markers %}
+                                        <tr class="remove">
+                                            <td><i class="fa fa-map-pin has-text-grey"></i></td>
+                                            <td>{{marker.name}}</td>
+                                            <td>{{marker.latitude}}</td>
+                                            <td>{{marker.longitude}}</td>
+                                            <td>{{marker.caption}}</td>
+                                            <td><button class="button is-light is-small"
+                                                    hx-post="{% url 'delete_marker' %}"
+                                                    hx-vals='{"name": "{{marker.name}}"}' hx-target="closest .remove"
+                                                    hx-swap="outerHTML swap:0.5s"><i
+                                                        class="fas fa-ban has-text-danger"></i></button>
+
+
                                             </td>
-                                            <td><input class="input" type="text" name="name" size="10"
-                                                    placeholder="Fishing Spot..."></td>
-                                            <td><input class="input" type="number" step=".00001" min="-90" max="90"
-                                                    name="latitude" size="7" placeholder="34.589"></td>
-                                            <td><input class="input" type="number" step=".00001" min="-90" max="90"
-                                                    name="longitude" size="7" placeholder="-78.302"></td>
-                                            <td><input class="input" type="text" name="caption" size="15"
-                                                    placeholder="Caught monster bass here!"></td>
-                                            <td><button type="submit" class="button is-light is-small"
-                                                    onclick="remove_marker_table_message()"><i
-                                                        class="fa fa-plus has-text-success"></i></button></td>
-                                        </form>
-                                    </tr>
-                                    {% for marker in markers %}
-                                    <tr class="remove">
-                                        <td><i class="fa fa-map-pin has-text-grey"></i></td>
-                                        <td>{{marker.name}}</td>
-                                        <td>{{marker.latitude}}</td>
-                                        <td>{{marker.longitude}}</td>
-                                        <td>{{marker.caption}}</td>
-                                        <td><button class="button is-light is-small" hx-post="{% url 'delete_marker' %}"
-                                                hx-vals='{"name": "{{marker.name}}"}' hx-target="closest .remove"
-                                                hx-swap="outerHTML swap:0.5s"><i
-                                                    class="fas fa-ban has-text-danger"></i></button>
-
-
-                                        </td>
-                                    </tr>
-                                    {%endfor%}
-                                </tbody>
-                            </table>
+                                        </tr>
+                                        {%endfor%}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -415,8 +426,7 @@
                                         <div class="control mb-3">
                                             <div id="tidefile_name" class="file has-name">
                                                 <label class="file-label" for="csvfiles">
-                                                    <input class="file-input" type="file" name="csvfiles"
-                                                        id="csvfiles">
+                                                    <input class="file-input" type="file" name="csvfiles" id="csvfiles">
                                                     <span class="file-cta">
                                                         <span class="file-icon">
                                                             <i class="fas fa-upload"></i>
@@ -437,51 +447,54 @@
                                             <button type="submit" class="button is-info is-fullwidth">Submit</button>
                                         </div>
                                     </form>
-                                    <div class="table-container">
-                                        <table class="table is-striped">
-                                            <thead>
-                                                <tr colspan="6">
-                                                    <p class="has-text-danger has-text-centered has-text-weight-bold">
-                                                        Example Format
-                                                    </p>
-                                                </tr>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>t</th>
-                                                    <th>v</th>
-                                                    <th>type</th>
-                                                    <th>date</th>
-                                                    <th>time</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>2/18/2022 21:42</td>
-                                                    <td>3.359</td>
-                                                    <td>H</td>
-                                                    <td>2022-02-18</td>
-                                                    <td>21:42</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>2/19/2022 4:18
-                                                    </td>
-                                                    <td>-0.247</td>
-                                                    <td>L</td>
-                                                    <td>2022-02-19</td>
-                                                    <td>4:18</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>2/19/2022 9:51</td>
-                                                    <td>3.797</td>
-                                                    <td>H</td>
-                                                    <td>2022-02-19</td>
-                                                    <td>9:51</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
+                                    <div style="display:grid;">
+                                        <div class="table-container">
+                                            <table class="table is-striped is-size-7">
+                                                <thead>
+                                                    <tr colspan="6">
+                                                        <p
+                                                            class="has-text-danger has-text-centered has-text-weight-bold">
+                                                            Example Format
+                                                        </p>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>t</th>
+                                                        <th>v</th>
+                                                        <th>type</th>
+                                                        <th>date</th>
+                                                        <th>time</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>2/18/2022 21:42</td>
+                                                        <td>3.359</td>
+                                                        <td>H</td>
+                                                        <td>2022-02-18</td>
+                                                        <td>21:42</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td>2/19/2022 4:18
+                                                        </td>
+                                                        <td>-0.247</td>
+                                                        <td>L</td>
+                                                        <td>2022-02-19</td>
+                                                        <td>4:18</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>3</td>
+                                                        <td>2/19/2022 9:51</td>
+                                                        <td>3.797</td>
+                                                        <td>H</td>
+                                                        <td>2022-02-19</td>
+                                                        <td>9:51</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -490,7 +503,7 @@
 
                                     <div class="mb-2">
                                         <i class="fas fa-clock has-text-purple is-size-6 mr-2"></i><span
-                                            class="subtitle">Timezone & Daylight Savings Time</span>
+                                            class="subtitle">Time Zone & Daylight Savings Time</span>
                                     </div>
                                     <form hx-post="{% url 'timeconfig' %}" hx-swap="outerHTML" hx-target="#timeconfig">
                                         <div id="timeconfig">
@@ -506,7 +519,7 @@
                                                 <small class="is-size-7 has-text-grey">Use this if your area requires
                                                     DST.</small>
                                                 <div class="mt-3">
-                                                    <label for="tz">Timezone</label>
+                                                    <label for="tz">Time Zone | UTC/GMT Offset</label>
                                                     <input class="input" type="number" size="5" min="-12" max="14"
                                                         step="1" name="tz" id="tz" value="{{tz}}">
                                                 </div>
@@ -597,7 +610,7 @@
             closeDropdowns();
         }
     });
-    
+
     //Tide file name update
     const tidefile = document.querySelector('#tidefile_name input[type=file]');
     tidefile.onchange = () => {

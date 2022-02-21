@@ -10,4 +10,4 @@ map to locate the corresponding 7-digit ID. Enter this value when prompted by th
 
 It will also ask for your date range (feel free to give it 5+ years of data!). It will pull the
 tide data from NOAA's publicly available API. The data will be saved as a .csv in this directory
-(./Tide Scraping Script/) to be then uploaded to teh customize screen.
+(./Tide Scraping Script/) which you can upload later to the customize screen.

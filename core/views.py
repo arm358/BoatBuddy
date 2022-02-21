@@ -1,13 +1,12 @@
 from django.shortcuts import render, redirect
-from django.forms.models import model_to_dict
-import os
 from django.http import HttpResponse, FileResponse
 from django.template.response import TemplateResponse
-from .forms import UploadGeoJSONForm, UploadENCForm, MarkerForm
 from django.contrib import messages
+from .forms import UploadGeoJSONForm, UploadENCForm
 from .converters import *
 from .models import Marker
 import uuid
+import os
 
 
 ### --- Main Views --- ###
@@ -194,7 +193,8 @@ def get_layers():
         file_list = []
         if os.path.isdir(f"./core/assets/layers/{item}"):
             for file in os.listdir(f"./core/assets/layers/{item}"):
-                file_list.append(file)
+                if not file.startswith("."):
+                    file_list.append(file)
             layers[item] = file_list
     return layers
 
@@ -223,7 +223,8 @@ def get_existing_layers():
         file_list = []
         if os.path.isdir(f"./core/assets/layers/{item}"):
             for file in os.listdir(f"./core/assets/layers/{item}"):
-                file_list.append(file)
+                if not file.startswith("."):
+                    file_list.append(file)
             layers[mapping[item]] = file_list
 
     for item in order:
