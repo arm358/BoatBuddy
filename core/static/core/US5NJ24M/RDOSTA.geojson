@@ -1,8 +1,0 @@
-{
-"type": "FeatureCollection",
-"name": "RDOSTA",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "RCID": 296, "PRIM": 1, "GRUP": 2, "OBJL": 105, "RVER": 1, "AGEN": 550, "FIDN": 36965231, "FIDS": 50, "LNAM": "022602340B6F0032", "CALSGN": "(WCMC)", "CATROS": "", "SIGFRQ": 1230000, "SCAMIN": 89999, "SORDAT": "200512", "SORIND": "US,US,graph,Chart 12316" }, "geometry": { "type": "Point", "coordinates": [ -74.8121708, 39.0025036 ] } }
-]
-}

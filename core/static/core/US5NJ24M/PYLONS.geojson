@@ -1,9 +1,0 @@
-{
-"type": "FeatureCollection",
-"name": "PYLONS",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "RCID": 1136, "PRIM": 1, "GRUP": 2, "OBJL": 98, "RVER": 1, "AGEN": 550, "FIDN": 36926357, "FIDS": 50, "LNAM": "0226023373950032", "CATPYL": 1, "SCAMIN": 44999, "SORDAT": "200512", "SORIND": "US,US,graph,Chart 12316" }, "geometry": { "type": "Point", "coordinates": [ -74.8298691, 39.0083419 ] } },
-{ "type": "Feature", "properties": { "RCID": 1137, "PRIM": 1, "GRUP": 2, "OBJL": 98, "RVER": 1, "AGEN": 550, "FIDN": 36926343, "FIDS": 50, "LNAM": "0226023373870032", "CATPYL": 1, "SCAMIN": 44999, "SORDAT": "200512", "SORIND": "US,US,graph,Chart 12316" }, "geometry": { "type": "Point", "coordinates": [ -74.8293269, 39.0069934 ] } }
-]
-}

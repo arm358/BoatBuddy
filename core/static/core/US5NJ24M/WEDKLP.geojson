@@ -1,8 +1,0 @@
-{
-"type": "FeatureCollection",
-"name": "WEDKLP",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "RCID": 4743, "PRIM": 1, "GRUP": 2, "OBJL": 158, "RVER": 1, "AGEN": 550, "FIDN": 36962851, "FIDS": 50, "LNAM": "0226023402230032", "CATWED": 3, "SCAMIN": 89999, "SORDAT": "200512", "SORIND": "US,US,graph,Chart 12316" }, "geometry": { "type": "Point", "coordinates": [ -74.7559814, 39.1272514 ] } }
-]
-}

@@ -1,9 +1,0 @@
-{
-"type": "FeatureCollection",
-"name": "SILTNK",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "RCID": 362, "PRIM": 1, "GRUP": 2, "OBJL": 125, "RVER": 1, "AGEN": 550, "FIDN": 37005458, "FIDS": 50, "LNAM": "02260234A8920032", "CATSIL": 2, "CONVIS": 1, "SCAMIN": 44999, "SORDAT": "20050600", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "Point", "coordinates": [ -74.4257174, 39.3699049 ] } },
-{ "type": "Feature", "properties": { "RCID": 363, "PRIM": 1, "GRUP": 2, "OBJL": 125, "RVER": 1, "AGEN": 550, "FIDN": 37005456, "FIDS": 50, "LNAM": "02260234A8900032", "CATSIL": 2, "CONVIS": 1, "SCAMIN": 44999, "SORDAT": "20050600", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "Point", "coordinates": [ -74.4269293, 39.3707394 ] } }
-]
-}

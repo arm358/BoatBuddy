@@ -1,9 +1,0 @@
-{
-"type": "FeatureCollection",
-"name": "RETRFL",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "RCID": 18, "PRIM": 1, "GRUP": 2, "OBJL": 113, "RVER": 1, "AGEN": 550, "FIDN": 37005500, "FIDS": 50, "LNAM": "02260234A8BC0032", "COLOUR": "6", "SCAMIN": 44999, "SORDAT": "20100400", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "Point", "coordinates": [ -74.439316, 39.3895632 ] } },
-{ "type": "Feature", "properties": { "RCID": 19, "PRIM": 1, "GRUP": 2, "OBJL": 113, "RVER": 1, "AGEN": 550, "FIDN": 37005504, "FIDS": 50, "LNAM": "02260234A8C00032", "COLOUR": "6", "SCAMIN": 44999, "SORDAT": "20100400", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "Point", "coordinates": [ -74.4326156, 39.390065 ] } }
-]
-}

@@ -1,0 +1,20 @@
+{
+    "type": "FeatureCollection",
+    "name": "Custom Markers",
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "name": "",
+                "description": ""
+            },
+            "geometry": {
+                "type": "Point",
+                "coordinates": [
+                    -74.4033289,
+                    39.3565733
+                ]
+            }
+        }
+    ]
+}

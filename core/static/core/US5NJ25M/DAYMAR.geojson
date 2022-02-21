@@ -1,9 +1,0 @@
-{
-"type": "FeatureCollection",
-"name": "DAYMAR",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "RCID": 11, "PRIM": 1, "GRUP": 2, "OBJL": 39, "RVER": 1, "AGEN": 550, "FIDN": 37005505, "FIDS": 50, "LNAM": "02260234A8C10032", "COLOUR": "3,3", "COLPAT": "6", "TOPSHP": 24, "SCAMIN": 44999, "SORDAT": "20050600", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "Point", "coordinates": [ -74.4326156, 39.390065 ] } },
-{ "type": "Feature", "properties": { "RCID": 12, "PRIM": 1, "GRUP": 2, "OBJL": 39, "RVER": 1, "AGEN": 550, "FIDN": 37005501, "FIDS": 50, "LNAM": "02260234A8BD0032", "COLOUR": "3,3", "COLPAT": "6", "TOPSHP": 24, "SCAMIN": 44999, "SORDAT": "20050600", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "Point", "coordinates": [ -74.439316, 39.3895632 ] } }
-]
-}

@@ -1,0 +1,745 @@
+{% extends "index.html" %}
+{% load static %}
+{% block content %}
+{% get_media_prefix as assets %}
+
+
+<!-- Data Update Script-->
+<script>
+    let coupled = true;
+    let route = true;
+    let knots = true;
+    let socket = new WebSocket('ws://boatbuddy.live/ws/data/');
+    socket.onopen = function (e) {
+        console.log('Connection established');
+
+    };
+
+    let track_history;
+    fetch("{% static 'core/track_history.json' %}").then(
+        function (u) { return u.json(); }
+    ).then(
+        function (json) {
+            track_history = json;
+        }
+    );
+
+    socket.onmessage = function (e) {
+        console.log(e.data);
+
+        var recData = JSON.parse(e.data);
+        var mph = recData.mph;
+        var knts = recData.knts;
+        var kph = recData.kph;
+        var direction = recData.direction;
+        var heading = recData.heading;
+        var depth = recData.depth;
+        var tide_type = recData.tide_type;
+        var tide_time = recData.tide_time;
+        var times = recData.times;
+        var heights = recData.heights;
+        var lat = recData.lat;
+        var lon = recData.lon;
+        var track = recData.track;
+        document.getElementById("speed").innerHTML = "";
+        if (knots) {
+            document.getElementById("speed").innerHTML = Math.floor(knts);
+            configSpeed.data.current = knts;
+        } else {
+            document.getElementById("speed").innerHTML = Math.floor(mph);
+            configSpeed.data.current = mph;
+        };
+        document.getElementById("direction").innerHTML = direction;
+        document.getElementById("heading").innerHTML = heading;
+        document.getElementById("tide_type").innerHTML = tide_type;
+        document.getElementById("tide_time").innerHTML = tide_time;
+        document.getElementById("speednavvalue").innerHTML = Math.floor(speed);
+        document.getElementById("dirarrow").style.transform = "rotate(" + heading + "deg)";
+        document.getElementById("add_pin_lat").value = lat;
+        document.getElementById("add_pin_lon").value = lon;
+
+        window.speed.update();
+
+        tidedata['data']["labels"] = times;
+        tidedata['data']['datasets'][0]['data'] = heights;
+        tidedata['options']['annotation']['annotations'][0]["value"] = tide_time;
+        window.linechart.update();
+
+        new maplibregl.Marker(current).setLngLat([lon, lat]).addTo(map);
+
+        if (coupled === true) {
+            map.setBearing(heading);
+            map.panTo([lon, lat]);
+        };
+
+        track_history.features[0].geometry.coordinates = track;
+        map.getSource("track_history").setData(track_history);
+
+        document.getElementById("add_pin_lat").value = lat;
+        document.getElementById("add_pin_lon").value = lon;
+
+    };
+
+    socket.onclose = function (e) {
+        alert('Connection Closed');
+    };
+
+</script>
+
+
+
+<body class="has-background-main" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+
+    <div class="container">
+
+        <div class="columns is-mobile is-gapless mb-0 z1 is-full">
+
+            <div class="column is-narrow">
+                <div id="tide" onclick="tidetoggle()">
+                    <span><i class="fas fa-arrows-alt-v has-text-link is-size-3 ml-2"></i></span>
+                    <span id="tide_type" class="is-size-3 has-text-weight-bold has-text-light pl-2">H</span>
+                    <span id="tide_time" class="is-size-3 has-text-weight-bold has-text-light pl-2"> 06:53</span>
+                </div>
+                <div id="speednav" onclick="tidetoggle()" style="display: none;">
+                    <span><i class="fas fa-tachometer-alt has-text-primary ml-2 is-size-3"></i></span>
+                    <span class="is-size-3 has-text-weight-bold has-text-light" id="speednavvalue"
+                        style="font-family:Orbitron">23</span>
+                </div>
+            </div>
+
+            <div class="column has-text-centered is-centered">
+
+            </div>
+
+
+
+            <div class="column has-text-right is-narrow is-right righthand">
+                <div id="dirnav" onclick="maptoggle()">
+                    <span><i id="dirarrow" class="fas fa-long-arrow-alt-up has-text-danger is-size-3 mr-2"></i></span>
+                    <span class="is-size-3 has-text-weight-bold has-text-light" id="heading">110</span><span id="degree"
+                        class="has-text-light has-text-weight-bold is-size-3">° </span>
+                    <span class="is-size-3 has-text-weight-bold has-text-light mr-2" id="direction">N</span>
+                    <span><i class="far fa-compass has-text-info mr-2 is-size-3"></i></span>
+                </div>
+            </div>
+        </div>
+
+        <div id="canvas-holder" class="overlaid" name="speedchart">
+            <div class="mph" id="speed">
+                0
+            </div>
+            <canvas id="chart-speed" onclick="speed_unit_toggle()" class=""></canvas>
+            <i hx-post="{% url 'shutdown' %}" hx-confirm="Shut down BoatBuddy?" hx-swap="none" class="power is-size-3 fas fa-power-off has-text-danger" id="power"></i>
+        </div>
+
+        <div id="canvas-holder" class="overlaid-tide has-text-centered" name="tidechart" style="display:none;">
+            <canvas id="chart-tide" class="mb-0 py-6"></canvas>
+        </div>
+
+        <div id="map-holder" class="" name="mapboxdiv" style="display:none;">
+
+
+            <div id='map' class="has-background-main" name="mapboxdiv"></div>
+            <div class="current" id="current"></div>
+            <div class="home" id="home"></div>
+            <i id="lock" onclick="couple_toggle()" class="fas fa-lock has-text-grey lock is-size-3"></i>
+            <i id="unlock" onclick="couple_toggle()" class="fas fa-unlock has-text-success lock is-size-3"
+                style="display:none;"></i>
+            <i id="route" onclick="route_toggle()" class="fas fa-route route is-size-3" style="color:red"></i>
+            <i id="customize" onclick="location.replace('/customize')" class="fas fa-cog is-size-3 cog"></i>
+            <img src="{{assets}}media/plus_pin.svg" class="add-new-marker" width="38px" onclick="pin_toggle()">
+            <div class="add-marker-popup has-text-light has-background-main py-4 px-4 z3 hidden" id="add_pin">
+                <div class="has-text-centered is-size-7 mb-2 has-text-weight-semibold">Add Pin to Current Location</div>
+                <form hx-post="{% url 'add_marker'%}" hx-target="#pin-swap" hx-swap="outerHTML"
+                    hx-encoding="multipart/form-data" class="has-text-centered">
+                    <input type="hidden" name="source" value="map" />
+                    <input class="input mb-2" type="text" name="name" size="10" placeholder="Name" id="add_pin_name">
+                    <input class="input" type="hidden" step=".00001" min="-90" max="90" id="add_pin_lat" name="latitude"
+                        value="">
+                    <input class="input" type="hidden" step=".00001" min="-90" max="90" id="add_pin_lon"
+                        name="longitude" value="">
+                    <input class="input" type="text" name="caption" size="15" placeholder="Caption"
+                        id="add_pin_caption">
+                    <button type="submit" onclick="loading_toggle()"
+                        class="button is-success is-small is-fullwidth mt-2">Add</button>
+
+                </form>
+
+                <div id="pin-swap">
+                    <div class="smallloader mt-2 unloaded" id="loading"></div>
+                    <div id="marker_added_success"></div>
+                </div>
+
+            </div>
+        </div>
+
+
+</body>
+
+<!-- Map Script -->
+<script>
+    var default_marker = {{ default_marker }};
+    var home_marker = {{ home_marker }};
+    var layers = {{ layers | safe }};
+    var path = "{{assets}}layers/";
+    var custom_markers = {{ custom_markers | safe }};
+
+    var map = new maplibregl.Map({
+        container: 'map',
+        style: "{% static 'core/style/style.json' %}",
+        center: default_marker,
+        setView: home_marker,
+        zoom: 14,
+        minZoom: 5,
+        bearing: 60,
+        pitch: 60
+    });
+
+
+
+    map.on("load", function () {
+
+        //add all layers
+
+
+        for (const layer in layers) {
+            console.log("switch layer: " + layer);
+            switch (layer) {
+                case "soundings":
+                    for (const file in layers[layer]) {
+                        var filename = layers[layer][file];
+                        console.log("sounding added: " + filename);
+                        map.addSource(filename, {
+                            "type": 'geojson',
+                            "data": path + layer + "/" + filename
+                        });
+                        map.addLayer({
+                            'id': filename,
+                            'type': 'symbol',
+                            'source': filename,
+                            layout: {
+                                'text-field': "{depth}",
+                                'text-font': ["Open Sans Regular"]
+                            }
+                        });
+                    };
+                    break;
+                case "depthareas":
+                    const all_layers = map.getStyle().layers;
+                    let first_layer;
+                    for (const layer of all_layers) {
+                        if (layer.type === 'symbol') {
+                            firstSymbolId = layer.id;
+                            break;
+                        }
+                    }
+                    for (const file in layers[layer]) {
+                        var filename = layers[layer][file];
+                        console.log("deptharea added: " + filename);
+                        map.addSource(filename, {
+                            "type": 'geojson',
+                            "data": path + layer + "/" + filename
+                        });
+                        map.addLayer({
+                            'id': filename,
+                            'type': 'fill',
+                            'source': filename,
+                            'paint': {
+                                'fill-color': {
+                                    property: 'DRVAL1',
+                                    stops: [[0.0, "#20B0F8"],
+                                    [0.9, "#48C0F8"],
+                                    [1.8, "#68C8F8"],
+                                    [3.6, "#80D0F8"],
+                                    [5.4, "#90D8F8"],
+                                    [9.1, "#A8E0F8"]]
+
+                                },
+                                'fill-opacity': .7
+                            }
+                        }, first_layer);
+
+                        map.addLayer({
+                            'id': filename + "line",
+                            'type': 'line',
+                            'source': filename,
+                            'paint': {
+                                'line-color': {
+                                    property: 'DRVAL1',
+                                    stops: [[0.0, "#A8E0F8"],
+                                    [0.9, "#90D8F8"],
+                                    [1.8, "#80D0F8"],
+                                    [3.6, "#68C8F8"],
+                                    [5.4, "#48C0F8"],
+                                    [9.1, "#20B0F8"]]
+                                },
+
+                                'line-width': 2
+                            }
+                        }, first_layer);
+                    };
+                    break;
+                case "rectracks":
+                    for (const file in layers[layer]) {
+                        var filename = layers[layer][file];
+                        console.log("rectrack added: " + filename);
+                        map.addSource(filename, {
+                            "type": 'geojson',
+                            "data": path + layer + "/" + filename
+                        });
+                        map.addLayer({
+                            'id': filename,
+                            'type': 'line',
+                            'source': filename,
+                            "paint": {
+                                "line-color": "#fbff12",
+                                'line-width': 3
+                            }
+                        });
+                    };
+                    break;
+                case "t1buoys":
+                    map.loadImage("{{assets}}media/buoy1.png", (error, t1buoy) => {
+                        if (error) throw error;
+                        map.addImage('buoy-1', t1buoy, { 'sdf': true });
+                    });
+                    for (const file in layers[layer]) {
+                        var filename = layers[layer][file];
+                        console.log("t1buoys added: " + filename);
+                        map.addSource(filename, {
+                            "type": 'geojson',
+                            "data": path + layer + "/" + filename
+                        });
+                        map.addLayer({
+                            'id': filename,
+                            'type': 'symbol',
+                            'source': filename,
+                            layout: {
+                                'icon-image': 'buoy-1',
+                                'icon-size': 0.25
+                            },
+                            paint: {
+                                'icon-color': "green"
+                            }
+                        });
+                    };
+                    break;
+                case "t2buoys":
+                    map.loadImage("{{assets}}media/buoy2.png", (error, t2buoy) => {
+                        if (error) throw error;
+                        map.addImage('buoy-2', t2buoy, { 'sdf': true });
+                    });
+                    for (const file in layers[layer]) {
+                        var filename = layers[layer][file];
+                        console.log("t2buoys added: " + filename);
+                        map.addSource(filename, {
+                            "type": 'geojson',
+                            "data": path + layer + "/" + filename
+                        });
+                        map.addLayer({
+                            'id': filename,
+                            'type': 'symbol',
+                            'source': filename,
+                            layout: {
+                                'icon-image': 'buoy-2',
+                                'icon-size': 0.25
+                            },
+                            paint: {
+                                'icon-color': "red"
+                            }
+                        });
+                    };
+                    break;
+                case "t1beacons":
+                    map.loadImage("{{assets}}media/beacon1.png", (error, t1beacon) => {
+                        if (error) throw error;
+                        map.addImage('beacon-1', t1beacon, { 'sdf': true });
+                    });
+                    for (const file in layers[layer]) {
+                        var filename = layers[layer][file];
+                        console.log("t1beacons added: " + filename);
+                        map.addSource(filename, {
+                            "type": 'geojson',
+                            "data": path + layer + "/" + filename
+                        });
+                        map.addLayer({
+                            'id': filename,
+                            'type': 'symbol',
+                            'source': filename,
+                            layout: {
+                                'icon-image': 'beacon-1',
+                                'icon-size': 1
+                            },
+                            paint: {
+                                'icon-color': "green"
+                            }
+                        });
+                    };
+                    break;
+                case "t2beacons":
+                    map.loadImage("{{assets}}media/beacon2.png", (error, t2beacon) => {
+                        if (error) throw error;
+                        map.addImage('beacon-2', t2beacon, { 'sdf': true });
+                    });
+                    for (const file in layers[layer]) {
+                        var filename = layers[layer][file];
+                        console.log("t2beacons added: " + filename);
+                        map.addSource(filename, {
+                            "type": 'geojson',
+                            "data": path + layer + "/" + filename
+                        });
+                        map.addLayer({
+                            'id': filename,
+                            'type': 'symbol',
+                            'source': filename,
+                            layout: {
+                                'icon-image': 'beacon-2',
+                                'icon-size': 1
+                            },
+                            paint: {
+                                'icon-color': "red"
+                            }
+                        });
+                    };
+                    break;
+            }
+        };
+
+
+
+        //add other markers
+        map.loadImage("{{assets}}media/pink_pin.png", (error, pink_pin) => {
+            if (error) throw error;
+            map.addImage('pink_pin', pink_pin);
+        });
+        console.log(custom_markers);
+        map.addSource("custom_markers", {
+            "type": 'geojson',
+            "data": custom_markers
+        });
+        map.addLayer({
+            'id': "custom_markers",
+            'type': 'symbol',
+            'source': "custom_markers",
+            layout: {
+                'icon-anchor': 'center',
+                'icon-image': 'pink_pin',
+                'icon-size': 1,
+                'text-field': "{name}",
+                'text-font': ["Open Sans Regular"],
+                'text-anchor': "top",
+
+
+            },
+        });
+
+
+    });
+
+    //add Home and Default markers
+    var current = document.getElementById("current")
+    var home = document.getElementById("home")
+    new maplibregl.Marker(current)
+        .setLngLat(default_marker)
+        .addTo(map);
+
+    new maplibregl.Marker(home)
+        .setLngLat(home_marker)
+        .addTo(map);
+
+    map.on('click', 'custom_markers', (e) => {
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const caption = e.features[0].properties.caption;
+
+        new maplibregl.Popup()
+            .setLngLat(coordinates)
+            .setHTML('<div class="is-size-6 has-background-main has-text-weight-semibold has-text-centered">' + caption + '</div>')
+            .addTo(map);
+    });
+    
+
+</script>
+
+<!-- Speedometer Chart Script-->
+<script>
+    Chart.defaults.global.animation.duration = 0;
+    Chart.defaults.global.defaultFontSize = 18;
+    Chart.defaults.global.defaultFontColor = "#ffffff";
+    Chart.defaults.global.defaultFontFamily = "Roboto";
+
+
+    var configSpeed = {
+
+        "type": "gauge",
+        "data": {
+            "datasets": [
+                {
+                    "data": [],
+                    "backgroundColor": [],
+                    "borderWidth": 0,
+                    "hoverBackgroundColor": [],
+                    "hoverBorderWidth": 0
+                }
+            ],
+            "current": 0,
+        },
+        "options": {
+            responsive: true,
+            "panel": {
+                "min": 0,
+                "max": 40,
+                "tickInterval": 1,
+                "tickColor": "#ffffff",
+                "tickOuterRadius": 99,
+                "tickInnerRadius": 85,
+                "scales": [0, 5, 10, 15, 20, 25, 30, 35, 40],
+                "scaleColor": "#ffffff",
+                "scaleBackgroundColor": "#343a40",
+                "scaleTextRadius": 70,
+                "scaleTextSize": 8,
+                "scaleTextColor": "#ffffff",
+                "scaleOuterRadius": 99,
+                "scaleInnerRadius": 85,
+            },
+            "needle": {
+                "lengthRadius": 100,
+                "circleColor": "rgba(188, 188, 188, 1)",
+                "color": "red",
+                "circleRadius": 7,
+                "width": 5,
+            },
+            "cutoutPercentage": 90,
+            "rotation": (1 / 2 + 1 / 3) * Math.PI,
+            "circumference": 2 * Math.PI * 2 / 3,
+            "legend": {
+                "display": false,
+                "text": "legend"
+            },
+            "tooltips": {
+                "enabled": false
+            },
+            "title": {
+                "display": true,
+                "text": "KNTS",
+                "position": "bottom",
+                "titleTextColor": "rgba(255, 255, 255, 1)",
+            },
+            "animation": {
+                "animateRotate": false,
+                "animateScale": false
+            },
+            "hover": {
+                "mode": null
+            }
+        }
+    };
+
+
+    var ctx = document.getElementById('chart-speed').getContext('2d');
+    window.speed = new Chart(ctx, configSpeed);
+
+
+
+
+</script>
+
+<!-- Tide Chart Script-->
+<script>
+    Chart.defaults.global.defaultFontFamily = "Roboto";
+
+    var tidedata = {
+        type: 'line',
+        data: {
+            labels: [1, 2, 3, 4, 5, 6, 7, 8],
+            datasets: [{
+                data: [1, 4, 1, 4, 1, 4, 1, 4],
+                backgroundColor: "rgba(255, 255, 255, 0.5)"
+            }],
+
+        },
+        options: {
+            legend: {
+                display: false,
+                text: "legend",
+            },
+            title: {
+                display: true,
+                text: "Tide Table",
+                position: "bottom",
+                titleTextColor: "rgba(255, 255, 255, 1)",
+                fontFamily: "Roboto",
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true,
+                        fontSize: 20,
+
+                    },
+                    gridLines: { color: "#ffffff" }
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontSize: 15,
+                    }
+                }]
+            },
+            annotation: {
+                annotations: [
+                    {
+                        type: "line",
+                        mode: "vertical",
+                        scaleID: "x-axis-0",
+                        value: "0:00",
+                        label: { content: "Next Tide", enabled: true, position: "middle" },
+                        borderColor: "red",
+                    }
+                ]
+            }
+        }
+    }
+    var ctx = document.getElementById('chart-tide').getContext('2d');
+    window.linechart = new Chart(ctx, tidedata);
+</script>
+
+<!-- Toggle scripts-->
+<script>
+    window.addEventListener("orientationchange", function (event) {
+        map.resize()
+    });
+
+    function loading_toggle() {
+        document.getElementById("loading").classList.toggle("unloaded");
+        document.getElementById("marker_added_success").classList.toggle("unloaded")
+    };
+    document.body.addEventListener("success",
+        function (evt) {
+            document.getElementById("add_pin_name").value = "";
+            document.getElementById("add_pin_caption").value = "";
+        });
+    
+    function pin_toggle() {
+        document.getElementById("add_pin").classList.toggle("hidden");
+    }
+
+    var speedchart = document.getElementsByName("speedchart")[0];
+    var tidechart = document.getElementsByName("tidechart")[0];
+    var speednav = document.getElementById("speednav");
+    var tide = document.getElementById("tide");
+    var mapboxdiv = document.getElementsByName("mapboxdiv")[0];
+    var speedchart = document.getElementsByName("speedchart")[0];
+    var tidechart = document.getElementsByName("tidechart")[0];
+    var tide_type = document.getElementById("tide_type");
+    var tide_time = document.getElementById("tide_time");
+    var degree = document.getElementById("degree");
+    var dirarrow = document.getElementById("dirarrow");
+    var direction = document.getElementById("direction");
+    var heading = document.getElementById("heading");
+    var speednav = document.getElementById("speednavvalue");
+    var speed = document.getElementById("speed");
+    var unlock = document.getElementById("unlock");
+    var lock = document.getElementById("lock");
+    var toggle = document.getElementById("route");
+
+
+
+    function tidetoggle() {
+
+        if (speedchart.style.display === "none") {
+            speedchart.style.display = "block";
+            tidechart.style.display = "none";
+            speednav.style.display = "none";
+            tide.style.display = "inline";
+        } else {
+            speedchart.style.display = "none";
+            tidechart.style.display = "block";
+            speednav.style.display = "inline";
+            tide.style.display = "none";
+        }
+
+    };
+    function maptoggle() {
+        map.resize();
+
+        if (mapboxdiv.style.display === "none") {
+            mapboxdiv.style.display = "block";
+            tide_type.classList.add("has-text-dark");
+            tide_time.classList.add("has-text-dark");
+            degree.classList.add("has-text-dark");
+            dirarrow.classList.add("has-text-dark");
+            direction.classList.add("has-text-dark");
+            heading.classList.add("has-text-dark");
+            speednav.classList.add("has-text-dark");
+            tide_type.classList.remove("has-text-light");
+            tide_time.classList.remove("has-text-light");
+            degree.classList.remove("has-text-light");
+            dirarrow.classList.remove("has-text-light");
+            direction.classList.remove("has-text-light");
+            heading.classList.remove("has-text-light");
+            speednav.classList.remove("has-text-light");
+            speed.style.display = "none";
+            map.resize();
+        } else {
+            mapboxdiv.style.display = "none";
+            speed.style.display = "block";
+            tide_type.classList.remove("has-text-dark");
+            tide_time.classList.remove("has-text-dark");
+            degree.classList.remove("has-text-dark");
+            dirarrow.classList.remove("has-text-dark");
+            direction.classList.remove("has-text-dark");
+            heading.classList.remove("has-text-dark");
+            speednav.classList.remove("has-text-dark");
+            tide_type.classList.add("has-text-light");
+            tide_time.classList.add("has-text-light");
+            degree.classList.add("has-text-light");
+            dirarrow.classList.add("has-text-light");
+            direction.classList.add("has-text-light");
+            heading.classList.add("has-text-light");
+            speednav.classList.add("has-text-light");
+
+        }
+
+    };
+    function couple_toggle() {
+        if (coupled === true) {
+            coupled = false;
+            lock.style.display = "none";
+            unlock.style.display = "inline";
+        } else {
+            coupled = true;
+            lock.style.display = "inline";
+            unlock.style.display = "none";
+        }
+
+
+    };
+    function route_toggle() {
+        if (route === true) {
+            route = false;
+            map.setLayoutProperty("track_history", "visibility", "none");
+            toggle.style.color = "gray";
+        } else {
+            route = true;
+            map.setLayoutProperty("track_history", "visibility", "visible");
+            toggle.style.color = "red";
+
+        }
+
+
+    };
+    function speed_unit_toggle() {
+        if (knots) {
+            knots = false;
+            configSpeed.options.title.text = "MPH"
+        } else {
+            knots = true;
+            configSpeed.options.title.text = "KNTS"
+
+        }
+
+
+    };
+
+</script>
+
+{% endblock content %}

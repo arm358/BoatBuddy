@@ -1,0 +1,22 @@
+<div id="timeconfig">
+    <div class="box">
+        <div>
+            {% if dst %}
+            <input type="checkbox" name="dst" id="dst" checked />
+            {% else %}
+            <input type="checkbox" name="dst" id="dst" checked />
+            {% endif %}
+            <label for="dst" class="checkbox">Account for DST?</label>
+        </div>
+        <small class="is-size-7 has-text-grey">Use this if your area requires
+            DST.</small>
+        <div class="mt-3">
+            <label for="tz">Timezone Offset</label>
+            <input class="input" type="number" size="5" min="-12" max="14" step="1" name="tz" id="tz" value="{{tz}}">
+        </div>
+        <div class="control mt-5 mb-3">
+            <button type="submit" class="button is-info is-fullwidth">Submit</button>
+        </div>
+    </div>
+    <div class="has-text-centered has-text-success" id="time-config-success">Success!</div>
+</div>

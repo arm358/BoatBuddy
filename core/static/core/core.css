@@ -1,74 +1,49 @@
 
-body {
-    height: 100vh;
-  }
-
-.bg-nav{
-    color: #B9B7A7;
-}
-
+/* General Style (backgrounds, heights, positions, etc. */
 .html{
-    height: 100vh;
-}
-
-.container {
   height: 100vh;
 }
-
+body {
+    height: 100vh;
+}
+.container {
+    height: 100vh;
+}
 canvas{
   height: 100vh;
 }
-
-.nav-item, .nav-link, .nav-value{
-    font-weight: bold;
-    font-size: 30px;
-    color: #ffffff;
+select {
+  overflow-y: auto;
+}
+.overlaid {
+  height:100%;
+  width:100%;
+}
+.overlaid-tide {
+  width:100%;
+  height:100%;
+}
+.has-background-main {
+  background-color: #070520 !important;
+}
+.has-text-purple {
+  color: #e6369c !important;
+}
+.table th {
+  vertical-align: middle;
+}
+.panel-block {
+  justify-content: center;
+}
+.panel-left {
+  justify-content: left !important;
+}
+.righthand {
+  left:100%;
 }
 
-.nav-item-danger{
-    font-weight: bold;
-    font-size: 30px;
-    color:#dc3545;
-}
 
-.nav-light{
-    font-size: 25px;
-    color: #ffffff;
-}
-
-
-.fill {
-    height: 100%;
-    width: 100%;
-    }
-.widthfill {
-      width: 105vw;
-      }
-
-.row {
-      margin-right: 0px;
-      width: 105vw !important;
-      }
-
-
-.depth {
-        font-weight:bolder;
-        font-size:160px;
-        }
-
-.ft {
-        font-weight:bold;
-        font-size:30px;
-        }
-
-.OCNJ{
-        font-weight:bold;
-        font-size:20px;
-        }
-
-.icon-compass {
-    font-size:50px;
-}
+/* Buttons on Map HUD */
 
 .mph {
     width: 100%; 
@@ -79,7 +54,7 @@ canvas{
     margin-top: 100px; 
     line-height:19px; 
     text-align: center; 
-    z-index: 999999999999999;
+    z-index: 999;
     font-size: 50px;
     color:red;
     font-weight:bolder;
@@ -98,8 +73,15 @@ canvas{
   right:3%;
   bottom:4%;
   text-align: right; 
-  z-index: 999;
   color: red;
+}
+.cog {
+  position: absolute; 
+  right:2.8%;
+  bottom:4%;
+  text-align: right; 
+  z-index: 999;
+  color:#03045e;
 }
 .route {
   position: absolute; 
@@ -108,48 +90,161 @@ canvas{
   text-align: left; 
   z-index: 999;
 }
-
-
-.btn {
-    font-size: 30px;
-    color: #ffffff;
+.add-new-marker{
+  position: absolute; 
+  right:2.5%;
+  bottom:14%;
+  text-align: right; 
+  z-index: 999;
+  filter: invert(46%) sepia(82%) saturate(5225%) hue-rotate(328deg) brightness(101%) contrast(101%);
 }
 
 
+/* Map container and map icons  */
 #map {
   position: absolute;
   top: 0;
   bottom: 0;
   height:100vh;
-  width:100%;
+  width:100%; 
+}
+.maplibregl-popup-close-button, .mapboxgl-popup-close-button {
+  display: none;
+}
+.maplibregl-popup-content, .mapboxgl-popup-content {
+  background-color: #070520 !important;
+  color: whitesmoke;
+  border-radius: 6px !important;
+}
+.maplibregl-popup-tip, .mapboxgl-popup-tip {
+ 
+  border-top-color: #070520 !important;
 
-  
+}
+.add-marker-popup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 200px;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  border-radius: 6px;
+}
+.current {
+  background-image: url('../../assets/media/boatnav.png');
+  background-size: 100%;
+  width: 25px;
+  height: 36px;
+}
+.home {
+  background-image: url('../../assets/media/houseicon.png');
+  background-size: 100%;
+  width: 30px;
+  height: 30px;
 }
 
 
-.marker {
-  background-image: url('boatnav.png');
-  background-size: cover;
-  width: 50px;
-  height: 50px;
+/* Effects */
+.fadeout {
+  transition: visibility 0s 2s, opacity 2s linear;
+  visibility: hidden;
+  opacity: 0;
+}
+.unloaded{
+  display: none !important;
+}
+.hidden{
+  display: none !important;
+}
+.htmx-swapping {
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+}
+
+
+/* Layers section of Customize screen */
+#tabs-with-content .tabs:not(:last-child) {
+  margin-bottom: 0;
+}
+#tabs-with-content .tab-content {
+  padding: 1rem;
+  display: none;
+}
+#tabs-with-content .tab-content.is-active {
+  display: flex;
+}
+@media (max-width: 800px) {
+.tabs ul {
+  -webkit-flex-direction: column;
+  flex-direction: column;
+}
+}
+
+
+
+
+@-webkit-keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes load8 {
+  0% {
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+.smallloader, .smallloader:after {
   border-radius: 50%;
-  cursor: pointer;
+  width: 3em;
+  height: 3em;
+}
+.smallloader {
+  margin: 1px auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: .4em solid rgba(255, 255, 255, 0.2);
+  border-right: .4em solid rgba(255, 255, 255, 0.2);
+  border-bottom: .4em solid rgba(255, 255, 255, 0.2);
+  border-left: .4em solid #ffffff;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
+}
+.loader, .loader:after {
+  border-radius: 50%;
+  width: 10em;
+  height: 10em;
+}
+.loader {
+  margin: 60px auto;
+  font-size: 10px;
+  position: relative;
+  text-indent: -9999em;
+  border-top: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-right: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1.1em solid rgba(255, 255, 255, 0.2);
+  border-left: 1.1em solid #ffffff;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-animation: load8 1.1s infinite linear;
+  animation: load8 1.1s infinite linear;
 }
 
-.overlaid {
-  height:100%;
-  width:100%;
-}
-
-.overlaid-tide {
-  width:100%;
-  height:100%;
-}
-
-.righthand {
-  left:100%;
-}
-
+/* z-indicies */
 .z0 {
   z-index:0;
   position: absolute;
@@ -169,7 +264,7 @@ canvas{
   position: absolute;
 }
 
-
+/* Chart formatting on orientation change */
 @media screen and (orientation: portrait) {
   .chartjs-render-monitor {
     position:absolute;

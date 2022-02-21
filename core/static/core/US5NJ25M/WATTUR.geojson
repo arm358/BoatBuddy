@@ -1,8 +1,0 @@
-{
-"type": "FeatureCollection",
-"name": "WATTUR",
-"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
-"features": [
-{ "type": "Feature", "properties": { "RCID": 385, "PRIM": 1, "GRUP": 2, "OBJL": 156, "RVER": 1, "AGEN": 550, "FIDN": 37005510, "FIDS": 50, "LNAM": "02260234A8C60032", "CATWAT": 1, "SCAMIN": 44999, "SORDAT": "20170406", "SORIND": "US,US,graph,Chart 12318" }, "geometry": { "type": "Point", "coordinates": [ -74.4076667, 39.3739799 ] } }
-]
-}

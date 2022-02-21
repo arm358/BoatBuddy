@@ -1,0 +1,12 @@
+<tr class="remove">
+    <td><i class="fa fa-map-pin has-text-grey"></i></td>
+    <td>{{marker.name}}</td>
+    <td>{{marker.latitude}}</td>
+    <td>{{marker.longitude}}</td>
+    <td>{{marker.caption}}</td>
+    <td><button class="button is-light is-small" hx-post="{% url 'delete_marker' %}"
+            hx-vals='{"name": "{{marker.name}}"}' hx-target="closest .remove"
+            hx-swap="outerHTML swap:1s"><i
+                class="fas fa-ban has-text-danger"></i></button>
+    </td>
+</tr>

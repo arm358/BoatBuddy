@@ -15,8 +15,8 @@ warnings.filterwarnings("ignore")
 #####  -----   Global Variables ----- #####
 wsaddress = "ws://boatbuddy.live/ws/data/"
 serialport = "/dev/ttyS0"
-tides = pd.read_csv("tides.csv")
-dst = pd.read_csv("dst.csv")
+tides = pd.read_csv("/core/assets/files/tides.csv")
+dst = pd.read_csv("core/assets/files/dst.csv")
 previous_heading = 0
 track_history = []
 connected = False
