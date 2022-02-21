@@ -357,7 +357,6 @@ def custom_marker_builder(markers):
             }
         custom_markers["features"].append(x)
     
-    print(custom_markers)
     return custom_markers
 
 

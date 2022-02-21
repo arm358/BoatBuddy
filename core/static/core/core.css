@@ -123,6 +123,7 @@ select {
 }
 .add-marker-popup {
   position: fixed;
+  opacity: 0.85;
   top: 50%;
   left: 50%;
   width: 200px;
