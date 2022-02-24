@@ -217,7 +217,7 @@
                                                                             class="fas fa-file-download is-size-5 mr-2 has-text-primary"></i>
                                                                         Download Layer</a>
                                                                 </div>
-                                                          
+
 
                                                             </div>
                                                         </div>
@@ -277,12 +277,14 @@
                                                     <tbody>
                                                         <tr>
                                                             <th>
-                                                                <input class="input" type="number" name="latitude"
-                                                                    size="9" value="{{home_marker.latitude}}">
+                                                                <input class="input" type="number" step=".00001"
+                                                                    min="-90" max="90" name="latitude" size="9"
+                                                                    value="{{home_marker.latitude}}">
                                                             </th>
                                                             <th>
-                                                                <input class="input" type="number" name="longitude"
-                                                                    size="9" value="{{home_marker.longitude}}">
+                                                                <input class="input" type="number" step=".00001"
+                                                                    min="-90" max="90" name="longitude" size="9"
+                                                                    value="{{home_marker.longitude}}">
                                                             </th>
                                                         </tr>
                                                     </tbody>
@@ -318,12 +320,14 @@
                                                     <tbody>
                                                         <tr>
                                                             <td>
-                                                                <input class="input" type="number" name="latitude"
-                                                                    size="9" value="{{default_marker.latitude}}">
+                                                                <input class="input" type="number" step=".00001"
+                                                                    min="-90" max="90" name="latitude" size="9"
+                                                                    value="{{default_marker.latitude}}">
                                                             </td>
                                                             <td>
-                                                                <input class="input" type="number" name="longitude"
-                                                                    size="9" value="{{default_marker.longitude}}">
+                                                                <input class="input" type="number" step=".00001"
+                                                                    min="-90" max="90" name="longitude" size="9"
+                                                                    value="{{default_marker.longitude}}">
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -492,6 +496,13 @@
                                                         <td>2022-02-19</td>
                                                         <td>9:51</td>
                                                     </tr>
+                                                    <tr>
+                                                        <td colspan="6">
+                                                            <p class="has-text-danger">
+                                                                Use the Tide Scraping Script to generate tide data. See GitHub for more details.
+                                                            </p>
+                                                        </td>
+                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -527,6 +538,8 @@
                                                     <button type="submit"
                                                         class="button is-info is-fullwidth">Submit</button>
                                                 </div>
+                                                <small class="is-size-7">May take 20 seconds to update tide
+                                                    charts</small>
                                             </div>
                                             <div class="has-text-centered has-text-success" id="time-config-success">
                                             </div>
@@ -562,11 +575,6 @@
     function remove_marker_table_message() {
         document.getElementById("marker_table_error").remove()
     };
-
-    document.body.addEventListener("success",
-        function (evt) {
-            document.getElementById("time-config-success").classList.add("fadeout");
-        });
 
     document.body.addEventListener("remove",
         function (evt) {

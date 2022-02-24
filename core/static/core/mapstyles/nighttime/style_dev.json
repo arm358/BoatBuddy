@@ -13,7 +13,7 @@
         "openmaptiles": {
             "type": "vector",
             "tiles": [
-                "http://127.0.0.1:8000/static/core/ne/{z}/{x}/{y}.pbf"
+                "http://127.0.0.1:8000/static/core/tiles/{z}/{x}/{y}.pbf"
             ],
             "maxzoom": 13
         }

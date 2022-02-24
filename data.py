@@ -65,19 +65,19 @@ def knots_to_kph(knots):
     kph = knots * 1.852
     return kph
 
-def gmt_to_est(now):
-    """since GPS time is GMT without daylight savings, converts current time to eastern and accounts
-    for DST"""
+def gmt_offset(now, dstflag, tz):
+    """since GPS time is GMT without daylight savings, converts current time to configured 
+    timezone and accounts for DST"""
     year = int(now.strftime("%Y"))
     startdate = dst[dst["year"] == year].iloc[0]["startdate"]
     endday = dst[dst["year"] == year].iloc[0]["endday"]
     begin = datetime.strptime(str(year) + " 3 " + str(startdate), "%Y %m %d")
     end = datetime.strptime(str(year) + " 10 " + str(endday), "%Y %m %d")
 
-    if now >= begin and now <= end:
-        now = now - timedelta(hours=4)
+    if now >= begin and now <= end and dstflag:
+        now = now + timedelta(hours=tz+1)
     else:
-        now = now - timedelta(hours=5)
+        now = now + timedelta(hours=tz)
 
     return now
 
@@ -204,7 +204,11 @@ while True:
             if counter % 100 == 0: #only pulls tide data every 100 loops == every 100 seconds
                 counter = 0
                 now = datetime.strptime(f"{gps.timestamp_utc.tm_year} {gps.timestamp_utc.tm_mon} {gps.timestamp_utc.tm_mday} {gps.timestamp_utc.tm_hour} {gps.timestamp_utc.tm_min}", "%Y %m %d %H %M")
-                ctime = gmt_to_est(now)
+                with open("./core/assets/files/timeconfig.json", "r") as timeconfig:
+                    data = json.load(timeconfig)
+                    dstflag = data["dst"]
+                    tz = int(data["timezone"])
+                ctime = gmt_offset(now, dstflag, tz)
                 type, tide_time, heights, times = get_tide_data(ctime)
             lat, lon, track_history = gps_converter(gps.latitude, gps.longitude, track_history)
             #this is the data package send over websocket and rendered in the browser
