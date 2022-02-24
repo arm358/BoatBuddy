@@ -13,12 +13,12 @@
         "openmaptiles": {
             "type": "vector",
             "tiles": [
-                "http://127.0.0.1:8000/static/core/tiles/{z}/{x}/{y}.pbf"
+                "http://boatbuddy.live/static/core/tiles/{z}/{x}/{y}.pbf"
             ],
             "maxzoom": 13
         }
     },
-    "glyphs": "http://127.0.0.1:8000/static/core/font/{fontstack}/{range}.pbf",
+    "glyphs": "http://boatbuddy.live/static/core/font/{fontstack}/{range}.pbf",
     "layers": [
         {
             "id": "background",
