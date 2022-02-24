@@ -13,7 +13,7 @@
         "openmaptiles": {
             "type": "vector",
             "tiles": [
-                "http://boatbuddy.live/static/core/ne/{z}/{x}/{y}.pbf"
+                "http://boatbuddy.live/static/core/tiles/{z}/{x}/{y}.pbf"
             ],
             "maxzoom": 13
         }
