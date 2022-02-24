@@ -10,4 +10,5 @@ urlpatterns = [
     path("addmarker/", views.add_marker, name="add_marker"),
     path("download/<file>", views.download_file, name="download"),
     path("timeconfig/", views.update_time_config, name="timeconfig"),
+    path("mapmodeconfig/", views.update_map_mode, name="mapmodeconfig"),
 ]

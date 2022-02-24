@@ -4,7 +4,7 @@ from django.template.response import TemplateResponse
 from django.contrib import messages
 from .forms import UploadGeoJSONForm, UploadENCForm
 from .converters import *
-from .models import Marker
+from .models import Marker, MapMode
 import uuid
 import os
 
@@ -12,17 +12,30 @@ import os
 ### --- Main Views --- ###
 def home(request):
     home_marker, default_marker, custom_markers = get_markers()
-    layers = get_layers()
     return render(
         request,
         "home.html",
         {
             "home_marker": home_marker,
             "default_marker": default_marker,
-            "layers": layers,
+            "layers": get_layers(),
             "custom_markers": custom_markers,
+            "mode": get_mode(),
+            "mode_toggle": get_mode_toggle()
         },
     )
+
+
+def get_mode():
+    mode = MapMode.objects.get(name="mode")
+    if mode.dark == True:
+        return "true"
+    else:
+        return "false"
+
+def get_mode_toggle():
+    mode = MapMode.objects.get(name="mode")
+    return mode.dark
 
 def customize(request):
     if request.method == "POST":
@@ -84,7 +97,7 @@ def customize(request):
             "tz": tz
         },
     )
-
+    
 
 ### --- ASYNC Views --- ###
 def shutdown(request):
@@ -119,10 +132,14 @@ def add_marker(request):
             response = TemplateResponse(request, "marker_row.html", {"marker": marker})
         else:
             response = TemplateResponse(request, "marker_popup_success.html")
-            response["HX-Trigger"] = "success"
+            response["HX-Trigger"] = "response"
         return response
     except:
-        response = TemplateResponse(request, "marker_error_row.html", {})
+        if request.POST["source"] == "customize":
+            response = TemplateResponse(request, "marker_error_row.html", {})
+        else:
+            response = TemplateResponse(request, "marker_popup_error.html")
+            response["HX-Trigger"] = "response"
         return response
 
 def delete_marker(request):
@@ -159,6 +176,17 @@ def update_time_config(request):
         response["HX-Trigger-After-Swap"] = "success"
         response["HX-Trigger"] = "remove"
         return response
+    else:
+        return redirect("customize")
+
+def update_map_mode(request):
+    if request.method == "POST":
+        mode = MapMode.objects.get(name="mode")
+        current_mode = mode.dark
+        new_mode = False if mode.dark else True
+        mode.dark = new_mode
+        mode.save()
+        return TemplateResponse(request, "map_mode.html", {"mode": current_mode})
     else:
         return redirect("customize")
 

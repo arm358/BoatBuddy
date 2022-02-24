@@ -79,10 +79,11 @@
         document.getElementById("add_pin_lon").value = lon;
 
     };
-
+    
     socket.onclose = function (e) {
         alert('Connection Closed');
     };
+    
 
 </script>
 
@@ -129,7 +130,8 @@
                 0
             </div>
             <canvas id="chart-speed" onclick="speed_unit_toggle()" class=""></canvas>
-            <i hx-post="{% url 'shutdown' %}" hx-confirm="Shut down BoatBuddy?" hx-swap="none" class="power is-size-3 fas fa-power-off has-text-danger" id="power"></i>
+            <i hx-post="{% url 'shutdown' %}" hx-confirm="Shut down BoatBuddy?" hx-swap="none"
+                class="power is-size-3 fas fa-power-off has-text-danger" id="power"></i>
         </div>
 
         <div id="canvas-holder" class="overlaid-tide has-text-centered" name="tidechart" style="display:none;">
@@ -142,16 +144,68 @@
             <div id='map' class="has-background-main" name="mapboxdiv"></div>
             <div class="current" id="current"></div>
             <div class="home" id="home"></div>
-            <i id="lock" onclick="couple_toggle()" class="fas fa-lock has-text-grey lock is-size-3"></i>
+            <div class="dropdown is-up is-right cog" id="dropdown">
+                <div class="dropdown-trigger">
+                    <i class="fas fa-cog is-size-3" aria-haspopup="true" aria-controls="dropdown-menu">
+                    </i>
+                </div>
+                <div class="dropdown-menu has-background-main mb-2" id="dropdown-menu" role="menu">
+                    <div class="dropdown-content has-text-left has-background-main">
+                        {% if mode_toggle %}
+                        <div class="dropdown-item has-text-light" hx-post="{% url 'mapmodeconfig' %}"
+                            hx-swap="outerHTML" onclick="set_map_mode()">
+                            <div class="columns is-mobile is-vcentered">
+                                <div class="column is-narrow"><i id="mode"
+                                        class="fas fa-sun is-size-3 has-text-warning"></i></div>
+                                <div class="column has-text-weight-semibold">Day Mode</div>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="dropdown-item has-text-light" hx-post="{% url 'mapmodeconfig' %}"
+                            hx-swap="outerHTML" onclick="set_map_mode()">
+                            <div class="columns is-mobile is-vcentered">
+                                <div class="column is-narrow"><i id="mode"
+                                        class="fas fa-moon is-size-3 has-text-light"></i></div>
+                                <div class="column has-text-weight-semibold">Night Mode</div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <div class="dropdown-item has-text-light" onclick="route_toggle()">
+                            <div class="columns is-mobile is-vcentered">
+                                <div class="column is-narrow"><i id="route" class="fas fa-route is-size-3"
+                                        style="color:red"></i>
+                                </div>
+                                <div class="column has-text-weight-semibold">Toggle Route History</div>
+                            </div>
+                        </div>
+                        <div class="dropdown-item has-text-light" onclick="location.replace('/customize')">
+                            <div class="columns is-mobile is-vcentered">
+                                <div class="column is-narrow "><i id="customize"
+                                        class="fas fa-screwdriver-wrench is-size-3 has-text-success"></i></div>
+                                <div class="column has-text-weight-semibold">Edit Configuration</div>
+                            </div>
+                        </div>
+                        <div class="dropdown-item has-text-light" onclick="pin_toggle()">
+                            <div class="columns is-mobile is-vcentered">
+                                <div class="column is-narrow"><img src="{{assets}}media/plus_pin.svg"
+                                        class="add-new-marker" width="32px"></div>
+                                <div class="column has-text-weight-semibold">Add New Marker</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <i id="lock" onclick="couple_toggle()" class="fas fa-lock has-text-dark lock is-size-3"></i>
             <i id="unlock" onclick="couple_toggle()" class="fas fa-unlock has-text-success lock is-size-3"
                 style="display:none;"></i>
-            <i id="route" onclick="route_toggle()" class="fas fa-route route is-size-3" style="color:red"></i>
-            <i id="customize" onclick="location.replace('/customize')" class="fas fa-cog is-size-3 cog"></i>
-            <img src="{{assets}}media/plus_pin.svg" class="add-new-marker" width="38px" onclick="pin_toggle()">
-            <div class="add-marker-popup has-text-light has-background-main py-4 px-4 z3 hidden" id="add_pin">
-                <div class="has-text-centered is-size-7 mb-2 has-text-weight-semibold">Add Pin to Current Location</div>
-                <form hx-post="{% url 'add_marker'%}" hx-target="#pin-swap" hx-swap="outerHTML"
+
+            <div class="add-marker-popup has-text-light has-background-main z3 has-text-right hidden" id="add_pin">
+                <button class="delete mr-1 mt-1" onclick="pin_toggle()"></button>
+
+                <form class="mb-4 px-4" hx-post="{% url 'add_marker'%}" hx-target="#pin-swap" hx-swap="outerHTML"
                     hx-encoding="multipart/form-data" class="has-text-centered">
+                    <div class="has-text-centered is-size-7 mb-2 has-text-weight-semibold">Add Pin to Current Location
+                    </div>
                     <input type="hidden" name="source" value="map" />
                     <input class="input mb-2" type="text" name="name" size="10" placeholder="Name" id="add_pin_name">
                     <input class="input" type="hidden" step=".00001" min="-90" max="90" id="add_pin_lat" name="latitude"
@@ -167,7 +221,7 @@
 
                 <div id="pin-swap">
                     <div class="smallloader mt-2 unloaded" id="loading"></div>
-                    <div id="marker_added_success"></div>
+                    <div id="marker_added_response"></div>
                 </div>
 
             </div>
@@ -175,7 +229,6 @@
 
 
 </body>
-
 <!-- Map Script -->
 <script>
     var default_marker = {{ default_marker }};
@@ -183,13 +236,21 @@
     var layers = {{ layers | safe }};
     var path = "{{assets}}layers/";
     var custom_markers = {{ custom_markers | safe }};
+    var dark_mode = {{ mode | safe }};
+    var loaded = false;
+
+    if (dark_mode) {
+        var style = "{% static 'core/mapstyles/nighttime/style.json' %}"
+    } else {
+        var style = "{% static 'core/mapstyles/daytime/style.json' %}"
+    };
 
     var map = new maplibregl.Map({
         container: 'map',
-        style: "{% static 'core/style/style.json' %}",
+        style: style,
         center: default_marker,
         setView: home_marker,
-        zoom: 14,
+        zoom: 12,
         minZoom: 5,
         bearing: 60,
         pitch: 60
@@ -198,221 +259,25 @@
 
 
     map.on("load", function () {
+        const all_layers = map.getStyle().layers;
+        // Find the index of the labels to put navigational layers behind
+        let firstlayer;
+        for (const layer of all_layers) {
+
+            if (layer.id === 'place_label_other') {
+                firstlayer = layer.id;
+                break;
+            }
+        }
 
         //add all layers
+        load_layers(dark_mode, firstlayer);
 
-
-        for (const layer in layers) {
-            console.log("switch layer: " + layer);
-            switch (layer) {
-                case "soundings":
-                    for (const file in layers[layer]) {
-                        var filename = layers[layer][file];
-                        console.log("sounding added: " + filename);
-                        map.addSource(filename, {
-                            "type": 'geojson',
-                            "data": path + layer + "/" + filename
-                        });
-                        map.addLayer({
-                            'id': filename,
-                            'type': 'symbol',
-                            'source': filename,
-                            layout: {
-                                'text-field': "{depth}",
-                                'text-font': ["Open Sans Regular"]
-                            }
-                        });
-                    };
-                    break;
-                case "depthareas":
-                    const all_layers = map.getStyle().layers;
-                    let first_layer;
-                    for (const layer of all_layers) {
-                        if (layer.type === 'symbol') {
-                            firstSymbolId = layer.id;
-                            break;
-                        }
-                    }
-                    for (const file in layers[layer]) {
-                        var filename = layers[layer][file];
-                        console.log("deptharea added: " + filename);
-                        map.addSource(filename, {
-                            "type": 'geojson',
-                            "data": path + layer + "/" + filename
-                        });
-                        map.addLayer({
-                            'id': filename,
-                            'type': 'fill',
-                            'source': filename,
-                            'paint': {
-                                'fill-color': {
-                                    property: 'DRVAL1',
-                                    stops: [[0.0, "#20B0F8"],
-                                    [0.9, "#48C0F8"],
-                                    [1.8, "#68C8F8"],
-                                    [3.6, "#80D0F8"],
-                                    [5.4, "#90D8F8"],
-                                    [9.1, "#A8E0F8"]]
-
-                                },
-                                'fill-opacity': .7
-                            }
-                        }, first_layer);
-
-                        map.addLayer({
-                            'id': filename + "line",
-                            'type': 'line',
-                            'source': filename,
-                            'paint': {
-                                'line-color': {
-                                    property: 'DRVAL1',
-                                    stops: [[0.0, "#A8E0F8"],
-                                    [0.9, "#90D8F8"],
-                                    [1.8, "#80D0F8"],
-                                    [3.6, "#68C8F8"],
-                                    [5.4, "#48C0F8"],
-                                    [9.1, "#20B0F8"]]
-                                },
-
-                                'line-width': 2
-                            }
-                        }, first_layer);
-                    };
-                    break;
-                case "rectracks":
-                    for (const file in layers[layer]) {
-                        var filename = layers[layer][file];
-                        console.log("rectrack added: " + filename);
-                        map.addSource(filename, {
-                            "type": 'geojson',
-                            "data": path + layer + "/" + filename
-                        });
-                        map.addLayer({
-                            'id': filename,
-                            'type': 'line',
-                            'source': filename,
-                            "paint": {
-                                "line-color": "#fbff12",
-                                'line-width': 3
-                            }
-                        });
-                    };
-                    break;
-                case "t1buoys":
-                    map.loadImage("{{assets}}media/buoy1.png", (error, t1buoy) => {
-                        if (error) throw error;
-                        map.addImage('buoy-1', t1buoy, { 'sdf': true });
-                    });
-                    for (const file in layers[layer]) {
-                        var filename = layers[layer][file];
-                        console.log("t1buoys added: " + filename);
-                        map.addSource(filename, {
-                            "type": 'geojson',
-                            "data": path + layer + "/" + filename
-                        });
-                        map.addLayer({
-                            'id': filename,
-                            'type': 'symbol',
-                            'source': filename,
-                            layout: {
-                                'icon-image': 'buoy-1',
-                                'icon-size': 0.25
-                            },
-                            paint: {
-                                'icon-color': "green"
-                            }
-                        });
-                    };
-                    break;
-                case "t2buoys":
-                    map.loadImage("{{assets}}media/buoy2.png", (error, t2buoy) => {
-                        if (error) throw error;
-                        map.addImage('buoy-2', t2buoy, { 'sdf': true });
-                    });
-                    for (const file in layers[layer]) {
-                        var filename = layers[layer][file];
-                        console.log("t2buoys added: " + filename);
-                        map.addSource(filename, {
-                            "type": 'geojson',
-                            "data": path + layer + "/" + filename
-                        });
-                        map.addLayer({
-                            'id': filename,
-                            'type': 'symbol',
-                            'source': filename,
-                            layout: {
-                                'icon-image': 'buoy-2',
-                                'icon-size': 0.25
-                            },
-                            paint: {
-                                'icon-color': "red"
-                            }
-                        });
-                    };
-                    break;
-                case "t1beacons":
-                    map.loadImage("{{assets}}media/beacon1.png", (error, t1beacon) => {
-                        if (error) throw error;
-                        map.addImage('beacon-1', t1beacon, { 'sdf': true });
-                    });
-                    for (const file in layers[layer]) {
-                        var filename = layers[layer][file];
-                        console.log("t1beacons added: " + filename);
-                        map.addSource(filename, {
-                            "type": 'geojson',
-                            "data": path + layer + "/" + filename
-                        });
-                        map.addLayer({
-                            'id': filename,
-                            'type': 'symbol',
-                            'source': filename,
-                            layout: {
-                                'icon-image': 'beacon-1',
-                                'icon-size': 1
-                            },
-                            paint: {
-                                'icon-color': "green"
-                            }
-                        });
-                    };
-                    break;
-                case "t2beacons":
-                    map.loadImage("{{assets}}media/beacon2.png", (error, t2beacon) => {
-                        if (error) throw error;
-                        map.addImage('beacon-2', t2beacon, { 'sdf': true });
-                    });
-                    for (const file in layers[layer]) {
-                        var filename = layers[layer][file];
-                        console.log("t2beacons added: " + filename);
-                        map.addSource(filename, {
-                            "type": 'geojson',
-                            "data": path + layer + "/" + filename
-                        });
-                        map.addLayer({
-                            'id': filename,
-                            'type': 'symbol',
-                            'source': filename,
-                            layout: {
-                                'icon-image': 'beacon-2',
-                                'icon-size': 1
-                            },
-                            paint: {
-                                'icon-color': "red"
-                            }
-                        });
-                    };
-                    break;
-            }
-        };
-
-
-
-        //add other markers
+        //add custom markers
         map.loadImage("{{assets}}media/pink_pin.png", (error, pink_pin) => {
             if (error) throw error;
             map.addImage('pink_pin', pink_pin);
         });
-        console.log(custom_markers);
         map.addSource("custom_markers", {
             "type": 'geojson',
             "data": custom_markers
@@ -428,8 +293,6 @@
                 'text-field': "{name}",
                 'text-font': ["Open Sans Regular"],
                 'text-anchor': "top",
-
-
             },
         });
 
@@ -447,16 +310,265 @@
         .setLngLat(home_marker)
         .addTo(map);
 
-    map.on('click', 'custom_markers', (e) => {
-        const coordinates = e.features[0].geometry.coordinates.slice();
-        const caption = e.features[0].properties.caption;
+    // function to load all layers from geojson source
+    function load_layers(dark_mode, firstlayer) {
+        for (const layer in layers) {
+            switch (layer) {
+                case "soundings":
+                    for (const file in layers[layer]) {
+                        var filename = layers[layer][file];
+                        if (typeof map.getSource(filename) === 'undefined') {
+                            map.addSource(filename, {
+                                "type": 'geojson',
+                                "data": path + layer + "/" + filename,
+                                "buffer": 16,
+                            });
 
-        new maplibregl.Popup()
-            .setLngLat(coordinates)
-            .setHTML('<div class="is-size-6 has-background-main has-text-weight-semibold has-text-centered">' + caption + '</div>')
-            .addTo(map);
+                            map.addLayer({
+                                'id': filename,
+                                'type': 'symbol',
+                                'source': filename,
+                                layout: {
+                                    'text-field': "{depth}",
+                                    'text-font': ["Open Sans Regular"]
+                                },
+                                paint: {
+                                    'text-color': dark_mode ? "#f5f5f5" : "#000000"
+                                }
+                            });
+                        };
+                    };
+                    break;
+                case "depthareas":
+                    for (const file in layers[layer]) {
+                        var filename = layers[layer][file];
+                        if (typeof map.getSource(filename) === 'undefined') {
+                            map.addSource(filename, {
+                                "type": 'geojson',
+                                "data": path + layer + "/" + filename,
+                                "buffer": 16
+                            });
+                            map.addLayer({
+                                'id': filename,
+                                'type': 'fill',
+                                'source': filename,
+                                'paint': {
+                                    'fill-color': {
+                                        property: 'DRVAL1',
+                                        stops: dark_mode ? [
+                                            [0.0, "#044d72"],
+                                            [0.9, "#055A82"],
+                                            [1.8, "#07608D"],
+                                            [3.6, "#086797"],
+                                            [5.4, "#0A6F9B"],
+                                            [9.1, "#0D76A2"],
+                                        ] : [
+                                            [0.0, "#20B0F8"],
+                                            [0.9, "#48C0F8"],
+                                            [1.8, "#68C8F8"],
+                                            [3.6, "#80D0F8"],
+                                            [5.4, "#90D8F8"],
+                                            [9.1, "#A8E0F8"],
+                                        ]
+                                    },
+                                    'fill-opacity': .7
+                                }
+                            }, firstlayer);
+                            map.addLayer({
+                                'id': filename + "line",
+                                'type': 'line',
+                                'source': filename,
+                                'paint': {
+                                    'line-color': {
+                                        property: 'DRVAL1',
+                                        stops: dark_mode ? [
+                                            [0.0, "#0D76A2"],
+                                            [0.9, "#0A6F9B"],
+                                            [1.8, "#086797"],
+                                            [3.6, "#07608D"],
+                                            [5.4, "#055A82"],
+                                            [9.1, "#044d72"],
+                                        ] : [
+                                            [0.0, "#A8E0F8"],
+                                            [0.9, "#90D8F8"],
+                                            [1.8, "#80D0F8"],
+                                            [3.6, "#68C8F8"],
+                                            [5.4, "#48C0F8"],
+                                            [9.1, "#20B0F8"],
+                                        ]
+                                    },
+
+                                    'line-width': 2
+                                }
+                            }, firstlayer);
+                        };
+                    };
+                    break;
+                case "rectracks":
+                    for (const file in layers[layer]) {
+                        var filename = layers[layer][file];
+                        if (typeof map.getSource(filename) === 'undefined') {
+                            map.addSource(filename, {
+                                "type": 'geojson',
+                                "data": path + layer + "/" + filename,
+                                "buffer": 16
+                            });
+                            map.addLayer({
+                                'id': filename,
+                                'type': 'line',
+                                'source': filename,
+                                "paint": {
+                                    "line-color": "#e6369c",
+                                    'line-width': 3
+                                }
+                            });
+                        };
+                    };
+                    break;
+                case "t1buoys":
+                    map.loadImage("{{assets}}media/buoy1.png", (error, t1buoy) => {
+                        if (error) throw error;
+                        if (!map.hasImage('buoy-1')) { map.addImage('buoy-1', t1buoy, { 'sdf': true }) };
+                    });
+                    for (const file in layers[layer]) {
+                        var filename = layers[layer][file];
+                        if (typeof map.getSource(filename) === 'undefined') {
+                            map.addSource(filename, {
+                                "type": 'geojson',
+                                "data": path + layer + "/" + filename,
+                                "buffer": 16
+                            });
+                            map.addLayer({
+                                'id': filename,
+                                'type': 'symbol',
+                                'source': filename,
+                                layout: {
+                                    'icon-image': 'buoy-1',
+                                    'icon-size': 0.25
+                                },
+                                paint: {
+                                    'icon-color': "green"
+                                }
+                            });
+                        };
+                    };
+                    break;
+                case "t2buoys":
+                    map.loadImage("{{assets}}media/buoy2.png", (error, t2buoy) => {
+                        if (error) throw error;
+                        if (!map.hasImage('buoy-2')) { map.addImage('buoy-2', t2buoy, { 'sdf': true }) };
+                    });
+                    for (const file in layers[layer]) {
+                        var filename = layers[layer][file];
+                        if (typeof map.getSource(filename) === 'undefined') {
+                            map.addSource(filename, {
+                                "type": 'geojson',
+                                "data": path + layer + "/" + filename,
+                                "buffer": 16
+                            });
+                            map.addLayer({
+                                'id': filename,
+                                'type': 'symbol',
+                                'source': filename,
+                                layout: {
+                                    'icon-image': 'buoy-2',
+                                    'icon-size': 0.25
+                                },
+                                paint: {
+                                    'icon-color': "red"
+                                }
+                            });
+                        };
+                    };
+                    break;
+                case "t1beacons":
+                    map.loadImage("{{assets}}media/beacon1.png", (error, t1beacon) => {
+                        if (error) throw error;
+                        if (!map.hasImage('beacon-1')) { map.addImage('beacon-1', t1beacon, { 'sdf': true }) };
+                    });
+                    for (const file in layers[layer]) {
+                        var filename = layers[layer][file];
+                        if (typeof map.getSource(filename) === 'undefined') {
+                            map.addSource(filename, {
+                                "type": 'geojson',
+                                "data": path + layer + "/" + filename,
+                                "buffer": 16
+                            });
+                            map.addLayer({
+                                'id': filename,
+                                'type': 'symbol',
+                                'source': filename,
+                                layout: {
+                                    'icon-image': 'beacon-1',
+                                    'icon-size': 1
+                                },
+                                paint: {
+                                    'icon-color': "green"
+                                }
+                            });
+                        };
+                    };
+                    break;
+                case "t2beacons":
+                    map.loadImage("{{assets}}media/beacon2.png", (error, t2beacon) => {
+                        if (error) throw error;
+                        if (!map.hasImage('beacon-2')) { map.addImage('beacon-2', t2beacon, { 'sdf': true }) };
+                    });
+                    for (const file in layers[layer]) {
+                        var filename = layers[layer][file];
+                        if (typeof map.getSource(filename) === 'undefined') {
+                            map.addSource(filename, {
+                                "type": 'geojson',
+                                "data": path + layer + "/" + filename,
+                                "buffer": 16
+                            });
+                            map.addLayer({
+                                'id': filename,
+                                'type': 'symbol',
+                                'source': filename,
+                                layout: {
+                                    'icon-image': 'beacon-2',
+                                    'icon-size': 1
+                                },
+                                paint: {
+                                    'icon-color': "red"
+                                }
+                            });
+                        };
+                    };
+                    break;
+            }
+        };
+
+
+    }
+
+    //toggle between day and night mode
+    function set_map_mode() {
+        if (dark_mode) {
+            dark_mode = false;
+            map.setStyle("{% static 'core/mapstyles/daytime/style.json' %}", true);
+
+        } else {
+            map.setStyle("{% static 'core/mapstyles/nighttime/style.json' %}", true);
+            dark_mode = true;
+
+        };
+        dark_mode_colors("map");
+    };
+
+    map.on('styledata', function () {
+        if (loaded) {
+            load_layers(dark_mode, 'place_label_other')
+        }
+    }
+    );
+    map.on('idle', function () {
+        if (!loaded) {
+            console.log("Map is done loading.")
+            loaded = true;
+        };
     });
-    
 
 </script>
 
@@ -604,24 +716,7 @@
 
 <!-- Toggle scripts-->
 <script>
-    window.addEventListener("orientationchange", function (event) {
-        map.resize()
-    });
-
-    function loading_toggle() {
-        document.getElementById("loading").classList.toggle("unloaded");
-        document.getElementById("marker_added_success").classList.toggle("unloaded")
-    };
-    document.body.addEventListener("success",
-        function (evt) {
-            document.getElementById("add_pin_name").value = "";
-            document.getElementById("add_pin_caption").value = "";
-        });
-    
-    function pin_toggle() {
-        document.getElementById("add_pin").classList.toggle("hidden");
-    }
-
+    /* get all elements that need to be updated on changes */
     var speedchart = document.getElementsByName("speedchart")[0];
     var tidechart = document.getElementsByName("tidechart")[0];
     var speednav = document.getElementById("speednav");
@@ -640,8 +735,42 @@
     var unlock = document.getElementById("unlock");
     var lock = document.getElementById("lock");
     var toggle = document.getElementById("route");
+    var loading = document.getElementById("loading")
+    var markeraddedresponse = document.getElementById("marker_added_response")
+    var pin = document.getElementById("add_pin")
+    var addpinname = document.getElementById("add_pin_name")
+    var addpincaptions = document.getElementById("add_pin_caption")
+
+    window.addEventListener("orientationchange", function (event) {
+        map.resize()
+    });
+    document.body.addEventListener("response",
+        function (evt) {
+            addpinname.value = "";
+            addpincaption.value = "";
+        });
 
 
+    // Add custom markers
+    map.on('click', 'custom_markers', (e) => {
+        const coordinates = e.features[0].geometry.coordinates.slice();
+        const caption = e.features[0].properties.caption;
+
+        new maplibregl.Popup()
+            .setLngLat(coordinates)
+            .setHTML('<div class="is-size-6 has-background-main has-text-weight-semibold has-text-centered">' + caption + '</div>')
+            .addTo(map);
+    });
+
+    // Toggle scripts on buttons
+    function loading_toggle() {
+        loading.classList.toggle("unloaded");
+        markeraddedresponse.classList.toggle("unloaded")
+    };
+
+    function pin_toggle() {
+        pin.classList.toggle("hidden");
+    }
 
     function tidetoggle() {
 
@@ -658,11 +787,24 @@
         }
 
     };
-    function maptoggle() {
-        map.resize();
-
-        if (mapboxdiv.style.display === "none") {
-            mapboxdiv.style.display = "block";
+    
+    function dark_mode_colors(screen) {
+        if ((dark_mode && screen === "map") || (screen === "speed")) {
+            tide_type.classList.remove("has-text-dark");
+            tide_time.classList.remove("has-text-dark");
+            degree.classList.remove("has-text-dark");
+            dirarrow.classList.remove("has-text-dark");
+            direction.classList.remove("has-text-dark");
+            heading.classList.remove("has-text-dark");
+            speednav.classList.remove("has-text-dark");
+            tide_type.classList.add("has-text-light");
+            tide_time.classList.add("has-text-light");
+            degree.classList.add("has-text-light");
+            dirarrow.classList.add("has-text-light");
+            direction.classList.add("has-text-light");
+            heading.classList.add("has-text-light");
+            speednav.classList.add("has-text-light");
+        } else {
             tide_type.classList.add("has-text-dark");
             tide_time.classList.add("has-text-dark");
             degree.classList.add("has-text-dark");
@@ -678,28 +820,24 @@
             heading.classList.remove("has-text-light");
             speednav.classList.remove("has-text-light");
             speed.style.display = "none";
+        }
+    };
+
+    function maptoggle() {
+        map.resize();
+
+        if (mapboxdiv.style.display === "none") {
+            mapboxdiv.style.display = "block";
+            dark_mode_colors("map");
             map.resize();
         } else {
             mapboxdiv.style.display = "none";
             speed.style.display = "block";
-            tide_type.classList.remove("has-text-dark");
-            tide_time.classList.remove("has-text-dark");
-            degree.classList.remove("has-text-dark");
-            dirarrow.classList.remove("has-text-dark");
-            direction.classList.remove("has-text-dark");
-            heading.classList.remove("has-text-dark");
-            speednav.classList.remove("has-text-dark");
-            tide_type.classList.add("has-text-light");
-            tide_time.classList.add("has-text-light");
-            degree.classList.add("has-text-light");
-            dirarrow.classList.add("has-text-light");
-            direction.classList.add("has-text-light");
-            heading.classList.add("has-text-light");
-            speednav.classList.add("has-text-light");
-
+            dark_mode_colors("speed");
         }
 
     };
+
     function couple_toggle() {
         if (coupled === true) {
             coupled = false;
@@ -713,6 +851,7 @@
 
 
     };
+    
     function route_toggle() {
         if (route === true) {
             route = false;
@@ -727,6 +866,7 @@
 
 
     };
+    
     function speed_unit_toggle() {
         if (knots) {
             knots = false;
@@ -739,6 +879,38 @@
 
 
     };
+
+    /* Dropdowns section */
+    const dropdowns = document.querySelectorAll('.dropdown:not(.is-hoverable)');
+    if (dropdowns.length > 0) {
+        // For each dropdown, add event handler to open on click.
+        dropdowns.forEach(function (el) {
+            el.addEventListener('click', function (e) {
+                e.stopPropagation();
+                el.classList.toggle('is-active');
+            });
+        });
+
+        // If user clicks outside dropdown, close it.
+        document.addEventListener('click', function (e) {
+            closeDropdowns();
+        });
+    }
+
+    //Close dropdowns by removing `is-active` class.
+    function closeDropdowns() {
+        dropdowns.forEach(function (el) {
+            el.classList.remove('is-active');
+        });
+    }
+
+    // Close dropdowns if ESC pressed
+    document.addEventListener('keydown', function (event) {
+        let e = event || window.event;
+        if (e.key === 'Esc' || e.key === 'Escape') {
+            closeDropdowns();
+        }
+    });
 
 </script>
 

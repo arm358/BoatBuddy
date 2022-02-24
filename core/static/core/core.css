@@ -41,6 +41,14 @@ select {
 .righthand {
   left:100%;
 }
+.dropdown-menu {
+  border-radius: 6px;
+  font-family: Roboto;
+}
+.dropdown-item:hover{
+  background-color:#0C0937 !important;
+  color:whitesmoke !important;
+}
 
 
 /* Buttons on Map HUD */
@@ -54,7 +62,6 @@ select {
     margin-top: 100px; 
     line-height:19px; 
     text-align: center; 
-    z-index: 999;
     font-size: 50px;
     color:red;
     font-weight:bolder;
@@ -91,11 +98,6 @@ select {
   z-index: 999;
 }
 .add-new-marker{
-  position: absolute; 
-  right:2.5%;
-  bottom:14%;
-  text-align: right; 
-  z-index: 999;
   filter: invert(46%) sepia(82%) saturate(5225%) hue-rotate(328deg) brightness(101%) contrast(101%);
 }
 

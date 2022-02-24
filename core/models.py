@@ -8,3 +8,7 @@ class Marker(models.Model):
     latitude = models.DecimalField(decimal_places=5, max_digits=7)
     longitude = models.DecimalField(decimal_places=5, max_digits=7)
     caption = models.CharField(max_length=50, null=True, blank=True)
+
+class MapMode(models.Model):
+    name = models.CharField(max_length=5)
+    dark = models.BooleanField()

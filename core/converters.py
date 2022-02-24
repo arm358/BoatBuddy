@@ -126,7 +126,7 @@ def rec_track_converter(staged_file, name, chart):
                 id = str(uuid.uuid4())[:7]
                 output_name = name.split(".")[0] + "_" + id + ".json"
             with open(f"{destination}/{output_name}", "w") as outfile:
-                json.dump(data, outfile)
+                json.dump(data, outfile, separators=(',', ':'))
             return True
         else:
             return False
@@ -142,8 +142,10 @@ def depth_area_converter(staged_file, name, chart):
             else:
                 id = str(uuid.uuid4())[:7]
                 output_name = name.split(".")[0] + "_" + id + ".json"
+            for feature in data["features"]:
+                feature["properties"] = {"DRVAL1": feature["properties"]["DRVAL1"]}
             with open(f"{destination}/{output_name}", "w") as outfile:
-                json.dump(data, outfile)
+                json.dump(data, outfile, separators=(',', ':'))
             return True
         else:
             return False
@@ -205,7 +207,7 @@ def sounding_converter(staged_file, name, chart):
                     sounding_out["features"].append(x)
 
             with open(destination, "w") as outfile:
-                json.dump(sounding_out, outfile)
+                json.dump(sounding_out, outfile, separators=(',', ':'))
             return True
         else:
             return False
@@ -267,9 +269,9 @@ def beacon_converter(staged_file, name, chart):
                 except KeyError:
                     continue
             with open(destination_1, "w") as outfile:
-                json.dump(beacon_out_1, outfile)
+                json.dump(beacon_out_1, outfile, separators=(',', ':'))
             with open(destination_2, "w") as outfile:
-                json.dump(beacon_out_2, outfile)
+                json.dump(beacon_out_2, outfile, separators=(',', ':'))
             return True
         else:
             return False
@@ -332,9 +334,9 @@ def buoy_converter(staged_file, name, chart):
                     continue
 
             with open(destination_1, "w") as outfile:
-                json.dump(buoy_out_1, outfile)
+                json.dump(buoy_out_1, outfile, separators=(',', ':'))
             with open(destination_2, "w") as outfile:
-                json.dump(buoy_out_2, outfile)
+                json.dump(buoy_out_2, outfile, separators=(',', ':'))
             return True
         else:
             return False

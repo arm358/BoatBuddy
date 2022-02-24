@@ -1,0 +1,17 @@
+{% if mode %}
+<div class="dropdown-item has-text-light" hx-post="{% url 'mapmodeconfig' %}" hx-swap="outerHTML"
+    onclick="set_map_mode()">
+    <div class="columns is-mobile is-vcentered">
+        <div class="column is-narrow"><i id="mode" class="fas fa-moon is-size-3 has-text-light"></i></div>
+        <div class="column has-text-weight-semibold">Night Mode</div>
+    </div>
+</div>
+{% else %}
+<div class="dropdown-item has-text-light" hx-post="{% url 'mapmodeconfig' %}" hx-swap="outerHTML"
+    onclick="set_map_mode()">
+    <div class="columns is-mobile is-vcentered">
+        <div class="column is-narrow"><i id="mode" class="fas fa-sun is-size-3 has-text-warning"></i></div>
+        <div class="column has-text-weight-semibold">Day Mode</div>
+    </div>
+</div>
+{% endif %}
