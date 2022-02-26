@@ -11,4 +11,5 @@ urlpatterns = [
     path("download/<file>", views.download_file, name="download"),
     path("timeconfig/", views.update_time_config, name="timeconfig"),
     path("mapmodeconfig/", views.update_map_mode, name="mapmodeconfig"),
+    path("tidedata/", views.update_tide_data, name="tidedata")
 ]

@@ -4,6 +4,7 @@ from django.template.response import TemplateResponse
 from django.contrib import messages
 from .forms import UploadGeoJSONForm, UploadENCForm
 from .converters import *
+from .tide_scraper import *
 from .models import Marker, MapMode
 import uuid
 import os
@@ -24,18 +25,6 @@ def home(request):
             "mode_toggle": get_mode_toggle()
         },
     )
-
-
-def get_mode():
-    mode = MapMode.objects.get(name="mode")
-    if mode.dark == True:
-        return "true"
-    else:
-        return "false"
-
-def get_mode_toggle():
-    mode = MapMode.objects.get(name="mode")
-    return mode.dark
 
 def customize(request):
     if request.method == "POST":
@@ -66,16 +55,6 @@ def customize(request):
                     "Something went wrong. Please double check that you are uploading an ENC file (.000 file extension) and have selected your desired layers.",
                 )
             return redirect("customize")
-        elif request.POST["source"] == "tide":
-            if correct_extensions(request, "csv"):
-                with open(f"{os.getcwd()}/core/assets/files/tides.csv", "wb+") as outfile:
-                    for chunk in request.FILES["csvfiles"].chunks():
-                        outfile.write(chunk)
-                messages.success(request, f"Tide data updated successfully.")
-                return redirect("customize")
-            else:
-                messages.warning(request, f"Issue with tide data. Please upload a .csv file.")
-                return redirect("customize")
         else:
             update_standard_markers(request)
             return redirect("customize")
@@ -100,17 +79,37 @@ def customize(request):
     
 
 ### --- ASYNC Views --- ###
+
+def update_tide_data(request):
+    if request.method == "POST":
+        begin = request.POST["begin"]
+        end = request.POST["end"]
+        station = request.POST["station"]
+        try:
+            begin_date, end_date = clean_dates(begin, end)
+            scrape_data(begin_date, end_date, station)
+            messages.success(request, f"Tide data updated successfully.")
+            return redirect("customize")
+        except:
+            messages.warning(request, f"Issue with gathering tide data. Make sure the ethernet cable is plugged in and your station ID is correct.")
+            return redirect("customize")
+    else:
+        return redirect("customize")
+
 def shutdown(request):
     os.system("sudo shutdown -h now")
     return HttpResponse("")
 
 def update_standard_markers(request):
-    name = request.POST["source"]
-    marker = Marker.objects.get(name=request.POST["source"])
-    marker.latitude = request.POST["latitude"]
-    marker.longitude = request.POST["longitude"]
-    marker.save()
-    messages.success(request, f"{name.capitalize()} marker location updated.")
+    if request.method == "POST":
+        name = request.POST["source"]
+        marker = Marker.objects.get(name=request.POST["source"])
+        marker.latitude = request.POST["latitude"]
+        marker.longitude = request.POST["longitude"]
+        marker.save()
+        messages.success(request, f"{name.capitalize()} marker location updated.")
+    else:
+        redirect("customize")
 
 def add_marker(request):
     try:
@@ -266,3 +265,14 @@ def handle_uploaded_file(file):
         for chunk in file.chunks():
             destination.write(chunk)
     return directory
+
+def get_mode():
+    mode = MapMode.objects.get(name="mode")
+    if mode.dark == True:
+        return "true"
+    else:
+        return "false"
+
+def get_mode_toggle():
+    mode = MapMode.objects.get(name="mode")
+    return mode.dark

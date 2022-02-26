@@ -22,7 +22,7 @@
         </div>
         {% endfor %}
         {% endif %}
-        <!-- Data Upload -->
+        <!-- Layers Upload -->
 
         <div class="columns is-mobile is-multiline is-centered">
             <!-- GeoJSON Upload -->
@@ -424,89 +424,19 @@
                                         <i class="fas fa-arrows-alt-v has-text-info is-size-6 mr-2"></i><span
                                             class="subtitle">Tide Data Upload</span>
                                     </div>
-                                    <form method="post" enctype="multipart/form-data">
-                                        {% csrf_token %}
-                                        <input type="hidden" name="source" value="tide" />
-                                        <div class="control mb-3">
-                                            <div id="tidefile_name" class="file has-name">
-                                                <label class="file-label" for="csvfiles">
-                                                    <input class="file-input" type="file" name="csvfiles" id="csvfiles">
-                                                    <span class="file-cta">
-                                                        <span class="file-icon">
-                                                            <i class="fas fa-upload"></i>
-                                                        </span>
-                                                        <span class="file-label">
-                                                            Choose a file…
-                                                        </span>
-                                                    </span>
-                                                    <span class="file-name">
-                                                        No file uploaded
-                                                    </span>
-                                                </label>
-
-                                            </div>
-                                            <small class="is-size-7 has-text-grey">Only .CSV files accepted.</small>
-                                        </div>
+                                    <form hx-post="{% url 'tidedata' %}" hx-swap="none" hx-confirm="Please ensure the ethernet cable is plugged in to be able to download NOAA Tide data!">
+                                            <label class="label" for="station">NOAA Station ID</label>
+                                            <input class="input" type="number" name="station" id="station">
+                                            <small class="is-size-7 has-text-grey"><a href="https://tidesandcurrents.noaa.gov/map/index.html">via NOAA Tides and Currents</a></small>
+                                            <label class="label" for="begin">Begin Date</label>
+                                            <input class="input" min="2020-01-01" max="2050-12-31" type="date" name="begin" id="begin">
+                                            <label class="label" for="end">End Date</label>
+                                            <input class="input" min="2020-01-01" max="2050-12-31" type="date" name="end" id="end">
                                         <div class="control mt-5 mb-3">
                                             <button type="submit" class="button is-info is-fullwidth">Submit</button>
                                         </div>
                                     </form>
-                                    <div style="display:grid;">
-                                        <div class="table-container">
-                                            <table class="table is-striped is-size-7">
-                                                <thead>
-                                                    <tr colspan="6">
-                                                        <p
-                                                            class="has-text-danger has-text-centered has-text-weight-bold">
-                                                            Example Format
-                                                        </p>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>#</th>
-                                                        <th>t</th>
-                                                        <th>v</th>
-                                                        <th>type</th>
-                                                        <th>date</th>
-                                                        <th>time</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>2/18/2022 21:42</td>
-                                                        <td>3.359</td>
-                                                        <td>H</td>
-                                                        <td>2022-02-18</td>
-                                                        <td>21:42</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>2/19/2022 4:18
-                                                        </td>
-                                                        <td>-0.247</td>
-                                                        <td>L</td>
-                                                        <td>2022-02-19</td>
-                                                        <td>4:18</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>3</td>
-                                                        <td>2/19/2022 9:51</td>
-                                                        <td>3.797</td>
-                                                        <td>H</td>
-                                                        <td>2022-02-19</td>
-                                                        <td>9:51</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td colspan="6">
-                                                            <p class="has-text-danger">
-                                                                Use the Tide Scraping Script to generate tide data. See GitHub for more details.
-                                                            </p>
-                                                        </td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                               
                                 </div>
                             </div>
                             <div class="column">
