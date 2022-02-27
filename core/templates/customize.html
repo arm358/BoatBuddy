@@ -424,18 +424,25 @@
                                         <i class="fas fa-arrows-alt-v has-text-info is-size-6 mr-2"></i><span
                                             class="subtitle">Tide Data Upload</span>
                                     </div>
-                                    <form hx-post="{% url 'tidedata' %}" hx-swap="none" hx-confirm="Please ensure the ethernet cable is plugged in to be able to download NOAA Tide data!">
+                                    <form hx-post="{% url 'tidedata' %}" hx-swap="outerHTML" hx-target="#tide-config-response" hx-confirm="Please ensure the ethernet cable is plugged in to be able to download NOAA Tide data!">
                                             <label class="label" for="station">NOAA Station ID</label>
                                             <input class="input" type="number" name="station" id="station">
-                                            <small class="is-size-7 has-text-grey"><a href="https://tidesandcurrents.noaa.gov/map/index.html">via NOAA Tides and Currents</a></small>
+                                            <small class="is-size-7 has-text-grey"><a target="_blank" href="https://tidesandcurrents.noaa.gov/map/index.html">via NOAA Tides and Currents</a></small>
                                             <label class="label" for="begin">Begin Date</label>
                                             <input class="input" min="2020-01-01" max="2050-12-31" type="date" name="begin" id="begin">
                                             <label class="label" for="end">End Date</label>
                                             <input class="input" min="2020-01-01" max="2050-12-31" type="date" name="end" id="end">
+                                            <small class="is-size-7 has-text-grey">Must be less than 10 years from Begin Date</small>
                                         <div class="control mt-5 mb-3">
-                                            <button type="submit" class="button is-info is-fullwidth">Submit</button>
+                                            <button type="submit" class="button is-info is-fullwidth" onclick="tide_loader_toggle()">Submit</button>
                                         </div>
                                     </form>
+                                    <div class="has-text-centered has-text-success" id="tide-config-response">
+                                    </div>
+                                  
+                                    <div class="column is-narrow hidden" id="tide-data-loader">
+                                        <div class="darksmallloader"></div>
+                                    </div>
                                
                                 </div>
                             </div>
@@ -468,8 +475,7 @@
                                                     <button type="submit"
                                                         class="button is-info is-fullwidth">Submit</button>
                                                 </div>
-                                                <small class="is-size-7">May take 20 seconds to update tide
-                                                    charts</small>
+                                                <small class="is-size-7">May take up to 2 minutes to update charts</small>
                                             </div>
                                             <div class="has-text-centered has-text-success" id="time-config-success">
                                             </div>
@@ -501,14 +507,16 @@
 
 
 <script>
-
+    function tide_loader_toggle() {
+        document.getElementById("tide-data-loader").classList.toggle("hidden");
+    }
     function remove_marker_table_message() {
         document.getElementById("marker_table_error").remove()
     };
 
     document.body.addEventListener("remove",
         function (evt) {
-            document.getElementById("time-config-success").remove()
+            document.getElementById("tide-data-loader").classList.toggle("hidden")
         });
 
     function show_loading() {
@@ -548,15 +556,6 @@
             closeDropdowns();
         }
     });
-
-    //Tide file name update
-    const tidefile = document.querySelector('#tidefile_name input[type=file]');
-    tidefile.onchange = () => {
-        if (tidefile.files.length > 0) {
-            const tidefilename = document.querySelector('#tidefile_name .file-name');
-            tidefilename.textContent = tidefile.files[0].name;
-        }
-    };
 
     //GeoJSON file name update
     const geojsonfile = document.querySelector('#geojsonfile input[type=file]');

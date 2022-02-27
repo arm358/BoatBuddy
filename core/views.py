@@ -1,3 +1,4 @@
+from pipes import Template
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, FileResponse
 from django.template.response import TemplateResponse
@@ -8,6 +9,7 @@ from .tide_scraper import *
 from .models import Marker, MapMode
 import uuid
 import os
+import time
 
 
 ### --- Main Views --- ###
@@ -88,11 +90,13 @@ def update_tide_data(request):
         try:
             begin_date, end_date = clean_dates(begin, end)
             scrape_data(begin_date, end_date, station)
-            messages.success(request, f"Tide data updated successfully.")
-            return redirect("customize")
+            success = True
+            
         except:
-            messages.warning(request, f"Issue with gathering tide data. Make sure the ethernet cable is plugged in and your station ID is correct.")
-            return redirect("customize")
+            success = False
+        response = TemplateResponse(request, "tide_config.html", {"success": success})
+        response["HX-Trigger"] = "remove"
+        return response
     else:
         return redirect("customize")
 
@@ -173,7 +177,6 @@ def update_time_config(request):
         dst, tz = set_time_config(dst_flag, request.POST["tz"])
         response = TemplateResponse(request, "time_config.html", {"dst": dst, "tz": tz})
         response["HX-Trigger-After-Swap"] = "success"
-        response["HX-Trigger"] = "remove"
         return response
     else:
         return redirect("customize")
