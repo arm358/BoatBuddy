@@ -7,3 +7,4 @@ pykalman==0.9.5
 pyserial==3.5
 scipy==1.8.0
 websocket-client==1.3.1
+gdown==4.4.0
