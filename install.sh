@@ -47,4 +47,6 @@ echo "interface=wlan0" | sudo tee /etc/dnsmasq.conf
 sudo sed -i '$adhcp-range=10.20.1.5,10.20.1.100,255.255.255.0,24\ndomain=live\naddress=/boatbuddy.live/10.20.1.1' /etc/dnsmasq.conf
 sudo touch /etc/hostapd/hostapd.conf
 echo "country_code=US" | sudo tee /etc/hostapd/hostapd.conf
-sed -i '$ainterface=wlan0\nssid=BoatBuddy\nhw_mode=g\nchannel=2\nmacaddr_acl=0\nauth_algs=1\nignore_broadcast_ssid=0\nwpa=2\nwpa_passphrase=boatbuddy\nwpa_key_mgmt=WPA-PSK\nwpa_pairwise=TKIP\nrsn_pairwise=CCMP' /etc/hostapd/hostapd.conf
+sudo sed -i '$ainterface=wlan0\nssid=BoatBuddy\nhw_mode=g\nchannel=2\nmacaddr_acl=0\nauth_algs=1\nignore_broadcast_ssid=0\nwpa=2\nwpa_passphrase=boatbuddy\nwpa_key_mgmt=WPA-PSK\nwpa_pairwise=TKIP\nrsn_pairwise=CCMP' /etc/hostapd/hostapd.conf
+sudo systemctl unmask hostapd.service
+sudo systemctl enable hostapd.service
