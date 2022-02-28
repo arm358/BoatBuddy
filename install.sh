@@ -35,7 +35,8 @@ sudo systemctl disable serial-getty@ttyS0.service
 sudo sed -i s/'console=serial0,115200 '//g /boot/cmdline.txt
 
 echo "\n${GRE}Setting up WiFi Access Point...${NC}"
-#sudo sed -i '$ainterface wlan0\nstatic ip_address=10.20.1.1/24\nnohook wpa_supplicant' /etc/dhcpcd.conf
+sudo raspi-config nonint do_wifi_country US
+sudo sed -i '$ainterface wlan0\nstatic ip_address=10.20.1.1/24\nnohook wpa_supplicant' /etc/dhcpcd.conf
 sudo touch /etc/sysctl.d/routed-ap.conf
 echo "net.ipv4.ip_forward=1" | sudo tee /etc/sysctl.d/routed-ap.conf
 sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE
