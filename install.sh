@@ -50,3 +50,15 @@ echo "country_code=US" | sudo tee /etc/hostapd/hostapd.conf
 sudo sed -i '$ainterface=wlan0\nssid=BoatBuddy\nhw_mode=g\nchannel=2\nmacaddr_acl=0\nauth_algs=1\nignore_broadcast_ssid=0\nwpa=2\nwpa_passphrase=boatbuddy\nwpa_key_mgmt=WPA-PSK\nwpa_pairwise=TKIP\nrsn_pairwise=CCMP' /etc/hostapd/hostapd.conf
 sudo systemctl unmask hostapd.service
 sudo systemctl enable hostapd.service
+echo "\n${CYAN}########## Great success! ##########"
+echo "\n${GRE}In order to finalize changes, your Raspberry Pi must reboot. Look for the BoatBuddy wifi network with password 'boatbuddy'\n\n${CYAN}"
+
+read -p "Would you like to reboot now? [y/n] " confirm
+case ${confirm} in
+        y|Y )
+                sudo reboot
+        ;;
+        * )
+                exit
+        ;;
+esac
