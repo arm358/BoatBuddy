@@ -207,11 +207,12 @@ def get_markers():
 
 def correct_extensions(request, extension):
     extension = extension.lower()
+    source = "geojson" if extension == "geojson" else "enc"
     correct_extensions = (
         True
         if all(
             file.name.split(".")[1] == extension
-            for file in request.FILES.getlist(f"{extension}files")
+            for file in request.FILES.getlist(f"{source}files")
         )
         else False
     )
