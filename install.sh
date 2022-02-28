@@ -26,13 +26,7 @@ echo "\n${GRE}Updating rc.local for autostart of services...${NC}"
 sudo sed -i '$i \cd home/pi/BoatBuddy\npython3 manage.py runserver boatbuddy.live:80 &\npython3 data.py &\n' /etc/rc.local
 
 echo "\n${GRE}Enabling hardware UART...${NC}"
-sudo sed -i '$i \enable_uart=1' /boot/config.txt
-sudo sed -i '$d' /boot/config.txt
-sudo systemctl stop serial-getty@ttyAMA0.service
-sudo systemctl disable serial-getty@ttyAMA0.service
-sudo systemctl stop serial-getty@ttyS0.service
-sudo systemctl disable serial-getty@ttyS0.service
-sudo sed -i s/'console=serial0,115200 '//g /boot/cmdline.txt
+sudo raspi-config nonint do_serial 2
 
 echo "\n${GRE}Setting up WiFi Access Point...${NC}"
 sudo raspi-config nonint do_wifi_country US
