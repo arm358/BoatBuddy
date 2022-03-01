@@ -17,7 +17,7 @@ wsaddress = "ws://boatbuddy.live/ws/data/"
 serialport = "/dev/ttyS0"
 tides = pd.read_csv("./core/assets/files/tides.csv")
 dst = pd.read_csv("./core/assets/files/dst.csv")
-previous_heading = 0
+previous_heading = 1
 track_history = []
 connected = False
 last_print = time.monotonic()
@@ -35,13 +35,14 @@ gps.send_command(b"PMTK220,1000")
 
 
 
-def heading_cleanser(heading):
+def heading_cleanser(heading, speed):
     """ returns the heading only if > 2 degrees of difference between last heading
     this reduces the small incremental changes in heading from being  displayed on the map """
     global previous_heading
     try:
         heading = int(heading)
-        if abs(previous_heading - heading) < 2:
+        speed = float(speed)
+        if abs(previous_heading - heading) < 2 or speed < 1.0:
             return previous_heading
         else:
             previous_heading = heading
@@ -162,9 +163,12 @@ def get_tide_data(now_time):
     return (type, tide_time, heights, times)
 
 
-def get_cardinal(heading):
+def get_cardinal(heading, speed):
     """a non-optimized way of converting the heading in degrees to cardinal heading"""
     heading = int(round(float(heading)))
+    speed = float(speed)
+    global previous_heading
+    heading = heading if speed > 1 else previous_heading
     if heading >= 337 or heading <= 23:
         cardinal = "N"
     elif heading > 23 and heading < 67:
@@ -216,8 +220,8 @@ while True:
                         "mph": knots_to_mph(float(gps.speed_knots)),
                         "knts": round(float(gps.speed_knots),2),
                         "kph": knots_to_kph(float(gps.speed_knots)),
-                        "direction": get_cardinal(gps.track_angle_deg),
-                        "heading": heading_cleanser(gps.track_angle_deg),
+                        "direction": get_cardinal(gps.track_angle_deg, gps.speed_knots),
+                        "heading": heading_cleanser(gps.track_angle_deg, gps.speed_knots),
                         "depth": 0,
                         "air": 0,
                         "humidity": 0,

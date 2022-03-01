@@ -26,7 +26,7 @@
 
 
     socket.onmessage = function (e) {
-        console.log(e.data);
+        //console.log(e.data);
 
         var recData = JSON.parse(e.data);
         var mph = recData.mph;
@@ -43,12 +43,10 @@
         var lon = recData.lon;
         var track = recData.track;
         document.getElementById("speed").innerHTML = "";
-        if (knots) {
-            console.log("knots")
+        if (knots) {)
             document.getElementById("speed").innerHTML = Math.floor(knts);
             configSpeed.data.current = knts;
         } else {
-            console.log("mph")
             document.getElementById("speed").innerHTML = Math.floor(mph);
             configSpeed.data.current = mph;
         };
