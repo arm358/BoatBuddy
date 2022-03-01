@@ -24,6 +24,7 @@
         }
     );
 
+
     socket.onmessage = function (e) {
         console.log(e.data);
 
@@ -43,9 +44,11 @@
         var track = recData.track;
         document.getElementById("speed").innerHTML = "";
         if (knots) {
+            console.log("knots")
             document.getElementById("speed").innerHTML = Math.floor(knts);
             configSpeed.data.current = knts;
         } else {
+            console.log("mph")
             document.getElementById("speed").innerHTML = Math.floor(mph);
             configSpeed.data.current = mph;
         };
@@ -58,12 +61,12 @@
         document.getElementById("add_pin_lat").value = lat;
         document.getElementById("add_pin_lon").value = lon;
 
-        window.speed.update();
+        speedchartbase.update();
 
         tidedata['data']["labels"] = times;
         tidedata['data']['datasets'][0]['data'] = heights;
         tidedata['options']['annotation']['annotations'][0]["value"] = tide_time;
-        window.linechart.update();
+        linechartbase.update();
 
         new maplibregl.Marker(current).setLngLat([lon, lat]).addTo(map);
 
@@ -71,19 +74,20 @@
             map.setBearing(heading);
             map.panTo([lon, lat]);
         };
-
-        track_history.features[0].geometry.coordinates = track;
-        map.getSource("track_history").setData(track_history);
+        if (track.length != 0) {
+            track_history.features[0].geometry.coordinates = track;
+            map.getSource("track_history").setData(track_history);
+        };
 
         document.getElementById("add_pin_lat").value = lat;
         document.getElementById("add_pin_lon").value = lon;
 
     };
-    
+
     socket.onclose = function (e) {
         alert('Connection Closed');
     };
-    
+
 
 </script>
 
@@ -294,6 +298,20 @@
                 'text-font': ["Open Sans Regular"],
                 'text-anchor': "top",
             },
+        });
+        //add track_history
+        map.addSource("track_history", {
+            "type": 'geojson',
+            "data": "{% static 'core/track_history.json' %}"
+        });
+        map.addLayer({
+            'id': 'track_history',
+            'type': 'line',
+            'source': 'track_history',
+            "paint": {
+                "line-color": "#ff0000",
+                'line-width': 3
+            }
         });
 
 
@@ -641,7 +659,7 @@
 
 
     var ctx = document.getElementById('chart-speed').getContext('2d');
-    window.speed = new Chart(ctx, configSpeed);
+    var speedchartbase = new Chart(ctx, configSpeed);
 
 
 
@@ -704,7 +722,7 @@
         }
     }
     var ctx = document.getElementById('chart-tide').getContext('2d');
-    window.linechart = new Chart(ctx, tidedata);
+    var linechartbase = new Chart(ctx, tidedata);
 </script>
 
 <!-- Toggle scripts-->
@@ -780,7 +798,7 @@
         }
 
     };
-    
+
     function dark_mode_colors(screen) {
         if ((dark_mode && screen === "map") || (screen === "speed")) {
             tide_type.classList.remove("has-text-dark");
@@ -844,7 +862,7 @@
 
 
     };
-    
+
     function route_toggle() {
         if (route === true) {
             route = false;
@@ -859,7 +877,7 @@
 
 
     };
-    
+
     function speed_unit_toggle() {
         if (knots) {
             knots = false;

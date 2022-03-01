@@ -57,12 +57,12 @@ def C_to_F(c):
 
 def knots_to_mph(knots):
     """ conver knots to mph """
-    mph = knots * 1.151
+    mph = round(knots * 1.151, 2)
     return mph
 
 def knots_to_kph(knots):
     """ conver knots to kph """
-    kph = knots * 1.852
+    kph = round(knots * 1.852, 2)
     return kph
 
 def gmt_offset(now, dstflag, tz):
@@ -214,7 +214,7 @@ while True:
             #this is the data package send over websocket and rendered in the browser
             payload = {
                         "mph": knots_to_mph(float(gps.speed_knots)),
-                        "knts": float(gps.speed_knots),
+                        "knts": round(float(gps.speed_knots),2),
                         "kph": knots_to_kph(float(gps.speed_knots)),
                         "direction": get_cardinal(gps.track_angle_deg),
                         "heading": heading_cleanser(gps.track_angle_deg),
