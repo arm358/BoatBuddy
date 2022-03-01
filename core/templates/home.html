@@ -43,18 +43,17 @@
         var lon = recData.lon;
         var track = recData.track;
         document.getElementById("speed").innerHTML = "";
-        if (knots) {)
-            document.getElementById("speed").innerHTML = Math.floor(knts);
+        if (knots) {
+            document.getElementById("speednavvalue").innerHTML = Math.floor(knts);
             configSpeed.data.current = knts;
         } else {
-            document.getElementById("speed").innerHTML = Math.floor(mph);
+            document.getElementById("speednavvalue").innerHTML = Math.floor(mph);
             configSpeed.data.current = mph;
         };
         document.getElementById("direction").innerHTML = direction;
         document.getElementById("heading").innerHTML = heading;
         document.getElementById("tide_type").innerHTML = tide_type;
         document.getElementById("tide_time").innerHTML = tide_time;
-        document.getElementById("speednavvalue").innerHTML = Math.floor(speed);
         document.getElementById("dirarrow").style.transform = "rotate(" + heading + "deg)";
         document.getElementById("add_pin_lat").value = lat;
         document.getElementById("add_pin_lon").value = lon;
